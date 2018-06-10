@@ -5,66 +5,61 @@ use \Jiny\Core\Registry;
 
 class Menu
 {
-    public function __construct()
+    private $Application;
+    public $_tree;
+
+    public function __construct($app)
     {
-        echo "Composite Pattern <br>";
+        // echo __CLASS__."를 생성하였습니다.<br>";
+        $this->Application = $app;
         
-        // 폴더
-        $root = new Composite("root");
-        $home = new Composite("home");
-            $hojin = new Composite("hojin");
-            $jiny = new Composite("jiny");
-        $users = new Composite("user");
-        $temp = new Composite("temp");
-
-        // 파일
-        $img1 = new Leaf("img1");
-        $img2 = new Leaf("img2");
-        $img3 = new Leaf("img3");
-        $img4 = new Leaf("img4");
-
-        // 
-        // 상단에 서브 컴포넌트(폴더)를 추가합니다.
-        $root->addNode($home);
-        $root->addNode($users);
-        // 서브폴더를 추가
-        $users->addNode($hojin);
-            // 파일(leaf)추가
-            $hojin->addNode($img1);
-            $hojin->addNode($img2);
-            $hojin->addNode($img3);
-            $hojin->addNode($img4);
-        $users->addNode($jiny);
-        $root->addNode($temp);
-
-        // echo "<pre>";    
-        // var_dump($root);
-        // echo "</pre>";
-
-        // 컴포짓 노트 트리를 출력합니다.
-        $this->show($root);
+        // 메뉴 json 데이터를 읽어 옵니다.
+        $this->loadData();
     }
 
-    public function show($component) {
-        $arr = $component->children;
-        foreach ($arr as $key => $value) {
-            
-            if ($value instanceof Composite) {
-                echo "Composite = ". $key. "<br>";
-    
-            } else if ($value instanceof Leaf) {
-                echo "Leaf = ". $key. "<br>";
-                
-            } else {
-                echo "??<br>";
+    public function loadData()
+    {
+        $this->_tree = \json_decode($this->jsonFile()); 
+        return $this;
+    }
+
+    public function jsonFile()
+    {
+        $filename = "../data/menu/menu.json";
+        return file_get_contents($filename);
+    }
+
+
+    public function getTree($uri=NULL)
+    {
+        // echo "메뉴 트리를 값을 반환합니다.";
+        if ($uri) {
+            foreach ($uri as $key => $value) {
+
             }
-    
-            // 재귀호출 탐색
-            if ($value) $this->show($value);
-    
+        } else {
+            // URI값이 없는 경우 전체반환
+            // root
+            return $this->_tree;
         }
     }
-    
 
+    public static function HTML($level=NULL)
+    {
+        // echo __METHOD__."<br>";
+
+        $Menu = \Jiny\Core\Registry\Registry::get("Menu");
+
+        $str = "<ul class=\"navbar-nav ml-auto\">";
+        foreach ($Menu->_tree as $value) {
+            // $list .= "<li></li>";
+            $str .= "<li class='".$value->css_item."'><a class='".$value->css_link."' href='".$value->href."'>".$value->name."</a></li>";
+        }
+        $str .= "</ul>";
+        return $str;
+    }
+
+
+  
 
 }

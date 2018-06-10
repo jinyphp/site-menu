@@ -11,7 +11,7 @@ class Composite extends Component
 
     public function __construct($name)
     {
-        //echo __CLASS__."가 생성이 되었습니다.<br>";
+        echo __CLASS__."가 생성이 되었습니다.<br>";
         $this->setName($name);
     }
 
@@ -19,7 +19,7 @@ class Composite extends Component
     {
         // 배열 원소 가합니다.
         $name = $folder->getName();
-        //echo "폴더 ".$name."를 추가합니다.<br>";
+        echo "폴더 ".$name."를 추가합니다.<br>";
         $this->_children[$name] = $folder;
     }
 

@@ -12,17 +12,18 @@ abstract class Component
 
     public function getName()
     {
-        return $this->name;
+        return $this->_name;
     }
 
     public function setName($name)
     {
+        echo $name."을 설정합니다.<br>";
         $this->_name = $name;
     }
 
     public function getLink()
     {
-        return $this->link;
+        return $this->_link;
     }
 
     public function setLink($link)
