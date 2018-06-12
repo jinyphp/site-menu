@@ -19,7 +19,8 @@ class Menu
 
     public function loadData()
     {
-        $this->_tree = \json_decode($this->jsonFile()); 
+        //$this->_tree = \json_decode($this->jsonFile()); 
+        $this->_tree = include("../data/menu/menu.php");
         return $this;
     }
 
