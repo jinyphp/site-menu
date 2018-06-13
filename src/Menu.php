@@ -20,13 +20,13 @@ class Menu
     public function loadData()
     {
         //$this->_tree = \json_decode($this->jsonFile()); 
-        $this->_tree = include("../data/menu/menu.php");
+        $this->_tree = include(ROOT.DS."data".DS."menu".DS."menu.php");
         return $this;
     }
 
     public function jsonFile()
     {
-        $filename = "../data/menu/menu.json";
+        $filename = ROOT.DS."data".DS."menu".DS."menu.json";
         return file_get_contents($filename);
     }
 
