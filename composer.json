@@ -25,7 +25,7 @@
             "Jiny\\Menu\\": "src/"
         },
         "files": [
-            "src/Helper/helpers.php"
+            "src/Helper/Helpers.php"
         ]
     }
 }
