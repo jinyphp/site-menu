@@ -17,7 +17,6 @@ abstract class Component
 
     public function setName($name)
     {
-        echo $name."을 설정합니다.<br>";
         $this->_name = $name;
     }
 

@@ -13,6 +13,8 @@ class Composite extends Component
     {
         echo __CLASS__."가 생성이 되었습니다.<br>";
         $this->setName($name);
+
+        $this->ko = $name;
     }
 
     public function addNode(component $folder)

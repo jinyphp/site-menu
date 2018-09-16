@@ -1,5 +1,19 @@
 <?php
+namespace Jiny\Menu;
 
+include "component.php";
+include "composite.php";
+
+$root = new \Jiny\Menu\Composite("root");
+print_r($root);
+
+$obj = json_encode($root);
+echo $obj."\n";
+
+$o = json_decode($obj);
+print_r($o);
+
+/*
 function tree()
 {
     echo "Composite Pattern <br>";
@@ -69,3 +83,4 @@ function show($component) {
 
     }
 }
+*/
