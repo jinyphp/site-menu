@@ -13,8 +13,17 @@ if (! function_exists('menu')) {
     /**
      * 메뉴의 객체를 생성후, 데이터를 읽어옵니다.
      */
-    function menu() {
-        $Menu = Registry::create(\Jiny\Menu\Menu::class,"Menu");
-        return $Menu->getTree();
+    function menu($uri=null) {
+        $Menu = menu_init();
+        return $Menu->getTree($uri);
+    }
+}
+
+if (! function_exists('menu_init')) {
+    /**
+     * 메뉴의 초기화: 객체를 생성합니다.
+     */
+    function menu_init() {
+        return Registry::create(\Jiny\Menu\Menu::class,"Menu");
     }
 }
