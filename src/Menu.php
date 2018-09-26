@@ -29,6 +29,8 @@ class Menu
             $this->_type = conf("site.menu_type");
         }
     }
+
+
     /**
      * 메뉴의 리소스 페스를 설정합니다.
      */
@@ -36,6 +38,7 @@ class Menu
     {
         $this->_path = $path;
     }
+
 
     /**
      * 메뉴의 리소스 페스를 읽어합니다.
@@ -45,13 +48,15 @@ class Menu
         return $this->_path;
     }
 
+
     /**
      * 사이트 환경설정 파일의 메뉴를 읽어 옵니다.
      */
     public function filename()
     {
-        return str_replace("/", DS, $this->_path);
+        return str_replace("/", DIRECTORY_SEPARATOR, $this->_path);
     }
+
 
     /**
      * 메뉴타입 : 사이트 환경설정의 값을 반환합니다.
@@ -61,6 +66,7 @@ class Menu
         return $this->_type;
     }
 
+
     /**
      *  메뉴타입 설정
      */
@@ -68,8 +74,6 @@ class Menu
     {
         $this->_type = $type;
     }
-
-
 
 
     /**
@@ -89,6 +93,7 @@ class Menu
         return $this->_tree;
     }
 
+
     /**
      * 데이터를 읽어 옵니다.
      */
@@ -97,6 +102,7 @@ class Menu
         $filename = $this->filename();
         return $strategy->load($filename);
     }
+
 
     /**
      * 메뉴 드라이버: 팩토리 생성패턴입니다.

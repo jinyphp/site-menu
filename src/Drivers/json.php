@@ -23,4 +23,8 @@ class JSON extends \Jiny\Menu\Driver
     {
         return json_decode(file_get_contents($path), TRUE);
     }
+
+    /**
+     * 
+     */
 }

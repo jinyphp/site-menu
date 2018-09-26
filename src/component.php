@@ -30,4 +30,8 @@ abstract class Component
         $this->_link = $link;
     }
 
+    /**
+     * 
+     */
+
 }

@@ -30,4 +30,8 @@ class Composite extends Component
         // 배열 원소를 제거합니다.
     }
 
+    /**
+     * 
+     */
+
 }

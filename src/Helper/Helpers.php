@@ -9,6 +9,7 @@
  */
 use \Jiny\Core\Registry\Registry;
 
+
 if (! function_exists('menu')) {
     /**
      * 메뉴의 객체를 생성후, 데이터를 읽어옵니다.
@@ -18,6 +19,7 @@ if (! function_exists('menu')) {
         return $Menu->getTree($uri);
     }
 }
+
 
 if (! function_exists('menu_init')) {
     /**
