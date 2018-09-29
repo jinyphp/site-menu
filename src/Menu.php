@@ -112,8 +112,8 @@ class Menu
         // 설정의 상태값을 읽어 옵니다.
         $type = $this->getType();
 
-        // 타입을 대문자로 변경, 클래스명을 일치합니다.
-        $factory = "\Jiny\Menu\Drivers\\".strtoupper( $type );
+        // 타입을 소문자로 변경, 클래스명을 일치합니다.
+        $factory = "\Jiny\Menu\Drivers\\".strtolower( $type );
 
         // 전략패턴으로 객체 로드
         // 알고리즘 클래스 적용
