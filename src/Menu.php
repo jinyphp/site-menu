@@ -88,11 +88,40 @@ class Menu
             // 전략 패턴으로 드라이버를 전달합니다.
             $strategy = $this->driver();
             $this->_tree = $this->load($strategy);
+
+            // 메뉴 확장 검사
+            $this->_tree = $this->extend($this->_tree);
+            //echo "<pre>";
+            //print_r($this->_tree);
+            //echo "</pre>";
         }
 
         return $this->_tree;
     }
 
+    /**
+     * 메뉴 확장을 처리합니다.
+     */
+    public function extend($menus)
+    {
+        // 확장검사
+        for ($i=0; $i<count($menus); $i++) {
+
+            //확장 처리
+            if (isset($menus[$i]['extend'])) {
+
+                // 메뉴타입 검사, 확장자 확인
+                // 메뉴타입에 대한 드라이버 
+                $path_parts = pathinfo($menus[$i]['extend']);
+                $strategy = $this->driver($path_parts['extension']);
+
+                // 메뉴를 읽어 재귀결합
+                $tree = $strategy->load($menus[$i]['extend']);
+                $menus[$i]['menu'] = $this->extend($tree);
+            }
+        }
+        return $menus;
+    }
 
     /**
      * 데이터를 읽어 옵니다.
@@ -107,10 +136,10 @@ class Menu
     /**
      * 메뉴 드라이버: 팩토리 생성패턴입니다.
      */
-    public function driver()
+    public function driver($type=null)
     {
         // 설정의 상태값을 읽어 옵니다.
-        $type = $this->getType();
+        if(!$type) $type = $this->getType();
 
         // 타입을 소문자로 변경, 클래스명을 일치합니다.
         $factory = "\Jiny\Menu\Drivers\\".strtolower( $type );
