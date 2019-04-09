@@ -25,7 +25,10 @@ class Menu
             $this->_path = $path;
         } else {
             // 기본값 설정
-            $this->_path = conf("site.menu_path");
+            $_ = "..".DS."..".DS."..".DS."..";
+            $this->_path = __DIR__.DS.$_.conf("site.menu_path");
+            
+         
             $this->_type = conf("site.menu_type");
         }
     }

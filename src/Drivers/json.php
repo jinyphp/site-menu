@@ -21,7 +21,9 @@ class JSON extends \Jiny\Menu\Driver
     
     public function load($path)
     {
-        return json_decode(file_get_contents($path), TRUE);
+        $json = json_decode(file_get_contents($path), TRUE);
+        // print_r($json);
+        return $json;
     }
 
     /**
