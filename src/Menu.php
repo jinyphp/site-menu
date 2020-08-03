@@ -15,33 +15,62 @@ class Menu
 {
     use \Jiny\Petterns\Singleton; // 싱글턴 패턴 적용
 
+    public $_path = "../data/menu/";
+    public function setPath($path) { $this->_path = $path; return $this; }
+    public function getPath() { return $this->_path; }
+
     public $arr = [];
-    public function php($file)
+    public function php($file=null)
     {
+        if (!$file) {
+            // 사용자 지정이 없는 경우 기본파일
+            $file = $this->_path."nav.php";
+        }
         $this->arr = include $file;
         return $this;
     }
 
-    public function json($file)
+    public function json($file = null)
     {
+        if (!$file) {
+            // 사용자 지정이 없는 경우 기본파일
+            $file = $this->_path."nav.json";
+        }
         $str = \file_get_contents($file);
-        $this->arr = \json_decode($str);
+        $this->arr = \json_decode($str, true);
         return $this;
     }
 
-    public function get()
+    public function get($key=null)
     {
+        if ($key && isset($this->arr[$key])) {
+            return $this->arr[$key];
+        }
         return $this->arr;
+    }
+
+    public function set($key, $value)
+    {
+        $this->arr[$key] = $value;
+        return $this;
     }
 
     private $_menu;
     public function html()
     {
-        if ($this->_menu) {
+        if (!$this->_menu) {
             $this->_menu = new \Jiny\Menu\HTML($this);
         }
         return $this->_menu;
     }
+
+    public function list()
+    {
+        $file = "./theme/theme.json";
+        $str = \file_get_contents($file);
+        $this->arr = \json_decode($str, true);
+    }
+
 
 
 
@@ -90,7 +119,7 @@ class Menu
     public $_tree;
 
     // 메뉴 리소스 경로가 저장되어 있습니다.
-    public $_path;
+    
     public $_type;
 
     /*
@@ -115,19 +144,13 @@ class Menu
     /**
      * 메뉴의 리소스 페스를 설정합니다.
      */
-    public function setPath($path)
-    {
-        $this->_path = $path;
-    }
+    
 
 
     /**
      * 메뉴의 리소스 페스를 읽어합니다.
      */
-    public function getPath()
-    {
-        return $this->_path;
-    }
+    
 
 
     /**

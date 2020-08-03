@@ -14,7 +14,7 @@ class HTML
     public function ul($arr=[])
     {
         $str = "<ul>";
-        foreach ( $this->arr as $key => $item) {
+        foreach ( $this->Menu->arr as $key => $item) {
             $str .= $this->li($item);
         }
         $str .= "</ul>";
@@ -23,13 +23,13 @@ class HTML
 
     private function li($obj)
     {
-        if(!$obj->enable) return "";
+        if(!$this->isEnable($obj)) return "";
         
         $str = "<li>";
-        $str .= "<a href='".$obj->href."'>".$obj->title."</a>";
+        $str .= "<a href='".$obj['href']."'>".$obj['title']."</a>";
         $ul = [];
         foreach ($obj as $key => $item) {
-            if (\is_object($item)) {
+            if (\is_object($item) || $this->is_assoArray($item)) {
                 $ul []= $this->li($item);
             }
         }
@@ -43,6 +43,24 @@ class HTML
         $str .= "</li>";
         return $str;
     }
+
+    private function isEnable($obj)
+    {
+        if($obj['enable']) return true;
+        return false;
+    }
+
+    private function is_assoArray($arr) : bool
+    {
+        if (\is_array($arr) && \array_keys($arr) !== range(0, count($arr) - 1)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    
+
 
 
     /*
