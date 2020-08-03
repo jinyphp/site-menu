@@ -13,14 +13,90 @@ use \Jiny\Core\Registry;
 
 class Menu
 {
+    use \Jiny\Petterns\Singleton; // 싱글턴 패턴 적용
+
+    public $arr = [];
+    public function php($file)
+    {
+        $this->arr = include $file;
+        return $this;
+    }
+
+    public function json($file)
+    {
+        $str = \file_get_contents($file);
+        $this->arr = \json_decode($str);
+        return $this;
+    }
+
+    public function get()
+    {
+        return $this->arr;
+    }
+
+    private $_menu;
+    public function html()
+    {
+        if ($this->_menu) {
+            $this->_menu = new \Jiny\Menu\HTML($this);
+        }
+        return $this->_menu;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * 데이터를 읽어 옵니다.
+     */
+    /*
+    public function load($strategy)
+    { 
+        $filename = $this->filename();
+        return $strategy->load($filename);
+    }
+    */
+
+
+
     public $_tree;
 
     // 메뉴 리소스 경로가 저장되어 있습니다.
     public $_path;
     public $_type;
 
+    /*
     public function __construct($path=NULL)
-    {        
+    {       
+        
         if ($path) {
             $this->_path = $path;
         } else {
@@ -31,7 +107,9 @@ class Menu
          
             $this->_type = conf("site.menu_type");
         }
+        
     }
+    */
 
 
     /**
@@ -126,14 +204,7 @@ class Menu
         return $menus;
     }
 
-    /**
-     * 데이터를 읽어 옵니다.
-     */
-    public function load($strategy)
-    { 
-        $filename = $this->filename();
-        return $strategy->load($filename);
-    }
+    
 
 
     /**

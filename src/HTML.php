@@ -1,10 +1,51 @@
 <?php
 namespace Jiny\Menu;
 
-use \Jiny\Core\Registry;
+//use \Jiny\Core\Registry;
 
 class HTML
 {
+    private $Menu;
+    public function __construct($menu)
+    {
+        $this->Menu = $menu;
+    }
+    
+    public function ul($arr=[])
+    {
+        $str = "<ul>";
+        foreach ( $this->arr as $key => $item) {
+            $str .= $this->li($item);
+        }
+        $str .= "</ul>";
+        return $str;
+    }
+
+    private function li($obj)
+    {
+        if(!$obj->enable) return "";
+        
+        $str = "<li>";
+        $str .= "<a href='".$obj->href."'>".$obj->title."</a>";
+        $ul = [];
+        foreach ($obj as $key => $item) {
+            if (\is_object($item)) {
+                $ul []= $this->li($item);
+            }
+        }
+
+        if(!empty($ul)) {
+            $str .= "<ul>";
+            foreach($ul as $item) $str .= $item;
+            $str .= "</ul>";
+        }
+        
+        $str .= "</li>";
+        return $str;
+    }
+
+
+    /*
     public static function topTree($level=NULL)
     {
         // echo __METHOD__."<br>";
@@ -61,6 +102,8 @@ class HTML
 
 
     }
+    */
+
 
     /**
      * 
