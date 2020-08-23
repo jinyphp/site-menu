@@ -11,31 +11,32 @@ class HTML
         $this->Menu = $menu;
     }
     
-    public function ul($arr=[])
+    public function ul($arr=[], $level=1)
     {
-        $str = "<ul>";
+        $str = "<ul class='menu".$level."'>";
         foreach ( $this->Menu->arr as $key => $item) {
-            $str .= $this->li($item);
+            $str .= $this->li($item, $level);
         }
         $str .= "</ul>";
         return $str;
     }
 
-    private function li($obj)
+    private function li($obj, $level)
     {
         if(!$this->isEnable($obj)) return "";
         
-        $str = "<li>";
+        $str = "<li class='menu".$level."'>";
         $str .= "<a href='".$obj['href']."'>".$obj['title']."</a>";
         $ul = [];
         foreach ($obj as $key => $item) {
             if (\is_object($item) || $this->is_assoArray($item)) {
-                $ul []= $this->li($item);
+                $ul []= $this->li($item, $level);
             }
         }
 
         if(!empty($ul)) {
-            $str .= "<ul>";
+            
+            $str .= "<ul class='menu".$level."'>";
             foreach($ul as $item) $str .= $item;
             $str .= "</ul>";
         }
