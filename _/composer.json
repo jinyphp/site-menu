@@ -1,10 +1,10 @@
 {
     "name": "jiny/menu",
-    "description": "jiny menu",
+    "description": "jinyPHP Framwork Menu",
     "keywords": [
         "jinyPHP",
         "framwork",
-        "menu"
+        "Menu"
     ],
     "homepage": "http://www.jinyphp.com",
     "type": "library",
@@ -18,26 +18,14 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "php": "^7.3|^8.0"
+        "php": ">= 7.0"
     },
     "autoload": {
         "psr-4": {
-            "Jiny\\Menu\\":"src/"
+            "Jiny\\Menu\\": "src/"
         },
-        "files" : [
-            "src/Helpers/Helper.php"
+        "files": [
+            "src/Helper/Helpers.php"
         ]
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Jiny\\Menu\\Tests\\": "tests/"
-        }
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Jiny\\Menu\\JinyMenuServiceProvider"
-            ]
-        }
     }
 }
