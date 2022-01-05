@@ -1,23 +1,4 @@
 <div>
-    {{-- 파일업로드 --}}
-    @if (session()->has('message'))
-        <div class="alert alert-success">
-            {{session('message')}}
-        </div>
-    @endif
-
-    <form wire:submit.prevent="fileUpload" id="form-upload" enctype="multipart/form-data">
-        <div class="form-group">
-            <label for="title">JsonMenu</label>
-            <input type="file" name="filename" wire:model="filename" class="form-control"/>
-            @error('filename') <span class="text-danger">{{$message}}</span> @enderror
-            <button type="submit" class="btn btn-success flot-right">Upload</button>
-        </div>
-    </form>
-
-
-
-
     <x-button success wire:click="encodeToJson">Apply</x-button>
 
     <br>
@@ -87,7 +68,14 @@
         </x-slot>
 
         <x-slot name="content">
+            타이틀
             <input type="text" wire:model="form.title">
+
+            <br>
+
+            href
+            <input type="text" wire:model="form.href">
+
         </x-slot>
 
         <x-slot name="footer">

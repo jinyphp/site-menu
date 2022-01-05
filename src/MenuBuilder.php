@@ -1,4 +1,7 @@
 <?php
+/**
+ * 메뉴 HTML 코드를 생성합니다.
+ */
 namespace Jiny\Menu;
 
 use Jiny\UI\View\Components\Icon;
@@ -113,6 +116,8 @@ class MenuBuilder
         $link = CLink()->addClass("sidebar-link");
         if(isset($value['href']) && $value['href']) $link->setUrl($value['href']);
         if(isset($value['target']) && $value['target']) $link->setUrl($value['target']);
+
+        $link->setAttribute("data-menu",$value['id']);
 
         return $link;
     }

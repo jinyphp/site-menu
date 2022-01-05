@@ -1,27 +1,26 @@
 <?php
-
+/**
+ * json menu tree 생성하는 컴포넌트
+ */
 namespace Jiny\Menu\View\Components;
 
 use Illuminate\View\Component;
-/**
- * json menu tree 생성
- */
+
 class Menu extends Component
 {
     public $jsondata = [];
     public $filename;
-    public function __construct($json=null)
+
+    public function __construct($path=null)
     {
         // json 파일 읽기
-        if ($json) {
-            $path = resource_path($json);
-            $json = file_get_contents($path);
-            $jsondata = json_decode($json,true);
-
-            $this->jsondata = $jsondata;
-            $this->filename = $json;
+        if ($path) {
+            \Jiny\Menu\Menu::instance()->setPath($path);
+            $this->filename = $path;
         }
 
+        $tree = \Jiny\Menu\Menu::instance()->load()->tree;
+        $this->jsondata = $tree;
     }
 
     public function builder($slot)

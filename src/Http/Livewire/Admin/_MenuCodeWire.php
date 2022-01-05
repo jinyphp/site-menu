@@ -41,8 +41,13 @@ class MenuCodeWire extends Component
     public function popupNewSubmit()
     {
         $menu = new Menus();
+        foreach ($this->form as $key => $value) {
+            $menu->$key = $value;
+        }
+        /*
         $menu->code = $this->form['code'];
         $menu->description = $this->form['description'];
+        */
         $menu->save();
 
         $this->popup = false;
@@ -51,9 +56,14 @@ class MenuCodeWire extends Component
     public function popupEdit($id)
     {
         $menu = Menus::find($id);
+        foreach ($menu as $key => $value) {
+            $this->form[$key] = $menu->$key;
+        }
+        /*
         $this->form['id'] = $menu->id;
         $this->form['code'] = $menu->code;
         $this->form['description'] = $menu->description;
+        */
 
         $this->popup = true;
     }

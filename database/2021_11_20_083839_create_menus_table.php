@@ -18,6 +18,7 @@ class CreateMenusTable extends Migration
             $table->timestamps();
 
             $table->string('enable')->nullable();
+
             $table->string('code');
             $table->string('description')->nullable();
 
