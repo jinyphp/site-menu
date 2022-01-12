@@ -5,6 +5,10 @@ namespace Jiny\Menu\Http\Controllers\Admin;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
+/**
+ *  Admin Page
+ *  메뉴 목록을 관리합니다.
+ */
 use Jiny\Table\Http\Controllers\ResourceController;
 class MenuController extends ResourceController
 {
@@ -13,7 +17,7 @@ class MenuController extends ResourceController
         parent::__construct();
         $this->setVisit($this);
 
-
+        /*
         ## 테이블 정보
         $this->actions['table'] = "menus";
 
@@ -21,9 +25,7 @@ class MenuController extends ResourceController
         $this->actions['view_filter'] = "jinymenu::admin.menu_code.filter";
         $this->actions['view_list'] = "jinymenu::admin.menu_code.list";
         $this->actions['view_form'] = "jinymenu::admin.menu_code.form";
-
-
-
+        */
     }
 
 

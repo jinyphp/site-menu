@@ -7,9 +7,13 @@
             border-left-color: gray;
             border-left-width: 1px;
 
-            border-top-color: #cccccc;
-            border-top-width: 1px;
-            border-top-style: dashed;
+            border-bottom-color: #cccccc;
+            border-bottom-width: 1px;
+            border-bottom-style: dashed;
+        }
+
+        .menu-tree ul {
+            margin-bottom:-1px;
         }
 
         .draggable-mirror {
@@ -24,14 +28,22 @@
         }
     </style>
 
+    <h2>{{ $code->code }}</h2>
+    {{ $code->description }}
+    <hr>
 
+    {!! xMenuTree($tree)
+        ->addFirstItem(
+            (new \Jiny\Html\CTag('li',true))
+            ->addItem(
+                // 루트등록 버튼
+                xLink( xIcon($name="plus-square-dotted", $type="bootstrap")->setClass("w-4 h-4") )
 
-    {!! xMenuTree($tree)->addFirstItem(
-            xLink( xIcon($name="plus-square-dotted", $type="bootstrap")->setClass("w-4 h-4") )
-            ->setAttribute('wire:click',"$"."emit('popupFormCreate','0')")
+                ->setAttribute('wire:click',"$"."emit('popupFormCreate','0')")
+            )->addClass("py-2")
         )
         ->addClass("menu-tree")
-        ->setAttribute('wire:sortable', "updateTaskOrder")
+        //->setAttribute('wire:sortable', "updateTaskOrder")
     !!}
 
     @push("scripts")

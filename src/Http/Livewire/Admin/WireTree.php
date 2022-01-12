@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 class WireTree extends Component
 {
     public $actions = [];
-    public $form=[];
+    public $forms=[];
     public $menu_id;
     public $tree;
 

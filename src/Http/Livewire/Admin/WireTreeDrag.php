@@ -8,16 +8,19 @@ use Illuminate\Support\Facades\DB;
 class WireTreeDrag extends Component
 {
     public $actions = [];
-    public $form=[];
+    public $forms=[];
     public $menu_id;
     public $tree;
 
     public function render()
     {
+        ## 메뉴코드 정보를 읽어 옵니다.
         $code = DB::table('menus')->where('id',$this->menu_id)->first();
         if ($code) {
-            $rows = $this->dbFetch($this->actions);
 
+            ## 메뉴데이터를 읽어 옵니다.
+            $rows = $this->dbFetch($this->actions);
+            ## row 데이터를 계층형으로 tree 구조를 생성합니다.
             $tree = $this->toTree($rows); //전처리
             $this->tree = $tree;
 
@@ -35,6 +38,7 @@ class WireTreeDrag extends Component
     blade;
     }
 
+    // 메뉴 데이터 읽기
     private function dbFetch($actions)
     {
         $rows = DB::table($this->actions['table'])
@@ -118,6 +122,7 @@ class WireTreeDrag extends Component
         }
     }
 
+    // 클릭하여 상위로 이동
     public function sort_up($id)
     {
         $row = DB::table($this->actions['table'])->find($id);
@@ -134,6 +139,7 @@ class WireTreeDrag extends Component
         }
     }
 
+    // 클릭하여 하위로 이동
     public function sort_down($id)
     {
         $row = DB::table($this->actions['table'])->find($id);

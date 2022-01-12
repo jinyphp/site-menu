@@ -69,12 +69,12 @@
 
         <x-slot name="content">
             타이틀
-            <input type="text" wire:model="form.title">
+            <input type="text" wire:model="forms.title">
 
             <br>
 
             href
-            <input type="text" wire:model="form.href">
+            <input type="text" wire:model="forms.href">
 
         </x-slot>
 

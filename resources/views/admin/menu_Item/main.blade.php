@@ -17,18 +17,22 @@
                     {{--
                     <x-button id="btn-json-convert" success wire:click="$emit('encodeToJson')">Json변환</x-button>
                     --}}
+                    {{--
                     <x-button id="btn-livepopup-create" primary wire:click="$emit('popupFormCreate','0')">신규추가</x-button>
+                    --}}
+                    <x-popup-form-create>신규추가</x-popup-form-create>
                 </div>
             </div>
         </div>
 
-
         @push('scripts')
         <script>
+            /*
             document.querySelector("#btn-livepopup-create").addEventListener("click",function(e){
                 e.preventDefault();
                 Livewire.emit('popupFormCreate','0');
             });
+            */
 
             document.querySelector("#btn-json-convert").addEventListener("click",function(e){
                 e.preventDefault();
@@ -42,28 +46,24 @@
         </script>
         @endpush
 
+
         <x-card>
             <x-card-header>
-
             </x-card-header>
             <x-card-body>
-                {{--
-                @livewire('WireTree',['menu_id'=>$request->id, 'actions'=>$actions])
-                --}}
                 @livewire('WireTreeDrag',['menu_id'=>$request->id, 'actions'=>$actions])
             </x-card-body>
             <x-card-footer>
                 @livewire('WireUpload',['menu_id'=>$request->id])
             </x-card-footer>
-
         </x-card>
 
-        {{--
-        @livewire('WireTable', ['actions'=>$actions])
-            --}}
-        @livewire('WirePopupTreeFrom', ['menu_id'=>$request->id, 'actions'=>$actions])
+
+        {{-- create/update/delete 처리 --}}
+        @livewire('PopupTreeFrom', ['menu_id'=>$request->id, 'actions'=>$actions])
 
         @livewire('Popup-LiveManual')
+
 
         {{-- Admin Rule Setting --}}
         <div class="px-2 py-2 bg-gray-300">

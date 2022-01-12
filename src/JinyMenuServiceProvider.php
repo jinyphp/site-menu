@@ -36,7 +36,9 @@ class JinyMenuServiceProvider extends ServiceProvider
 
             Livewire::component('WireTree', \Jiny\Menu\Http\Livewire\Admin\WireTree::class);
             Livewire::component('WireTreeDrag', \Jiny\Menu\Http\Livewire\Admin\WireTreeDrag::class);
-            Livewire::component('WirePopupTreeFrom', \Jiny\Menu\Http\Livewire\Admin\WirePopupTreeFrom::class);
+
+            // PopupForm을 상속 재구현한 tree 입력폼 처리루틴
+            Livewire::component('PopupTreeFrom', \Jiny\Menu\Http\Livewire\Admin\PopupTreeFrom::class);
 
             Livewire::component('WireUpload', \Jiny\Menu\Http\Livewire\Admin\WireUpload::class);
             //Livewire::component('Admin-SiteMenu-Code', \Jiny\Menu\Http\Livewire\Admin\MenuCodeWire::class);

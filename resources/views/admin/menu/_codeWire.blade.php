@@ -35,14 +35,14 @@
             <div>
                 <div>코드</div>
                 <div>
-                    <input type="text" wire:model="form.code">
+                    <input type="text" wire:model="forms.code">
                 </div>
             </div>
 
             <div>
                 <div>설명</div>
                 <div>
-                    <input type="text" wire:model="form.description">
+                    <input type="text" wire:model="forms.description">
                 </div>
             </div>
 
