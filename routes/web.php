@@ -49,3 +49,9 @@ Route::middleware(['web','auth:sanctum', 'verified'])
 
 
 });
+
+
+Route::middleware(['web','auth:sanctum', 'verified'])
+->prefix('/api')->group(function () {
+    Route::post('menu/pos',[\Jiny\Menu\API\Controllers\Pos::class,"index"]);
+});

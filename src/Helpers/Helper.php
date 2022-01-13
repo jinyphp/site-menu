@@ -16,7 +16,7 @@ function xMenuJson($json) {
 
 function xMenuTree($tree) {
     // 루트 ul은 패딩 0로 설정
-    return (new \Jiny\Menu\Builder\Tree($tree))->make()->addClass('p-0');
+    return (new \Jiny\Menu\Builder\Tree($tree))->make();//->addClass('p-0');
 }
 
 

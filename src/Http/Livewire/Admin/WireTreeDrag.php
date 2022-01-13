@@ -43,7 +43,7 @@ class WireTreeDrag extends Component
     {
         $rows = DB::table($this->actions['table'])
             ->where('menu_id', $this->menu_id)
-            ->orderBy('level',"asc")
+            ->orderBy('level',"desc")
             ->orderBy('pos',"asc")
             ->get();
         return $rows;
@@ -51,6 +51,7 @@ class WireTreeDrag extends Component
 
     private function toTree($rows)
     {
+
         // 배열변환
         $tree = [];
 
@@ -61,6 +62,8 @@ class WireTreeDrag extends Component
             }
         }
 
+
+
         // 계층이동
         foreach($tree as $i => $item) {
             if($item['level'] != 1) {
@@ -69,6 +72,10 @@ class WireTreeDrag extends Component
                 unset($tree[$i]);
             }
         }
+
+        //dd($tree);
+
+
 
         return $tree;
         return $this->sortByPos($tree);
@@ -123,7 +130,7 @@ class WireTreeDrag extends Component
     }
 
     // 클릭하여 상위로 이동
-    public function sort_up($id)
+    public function move_up($id)
     {
         $row = DB::table($this->actions['table'])->find($id);
 
@@ -140,7 +147,7 @@ class WireTreeDrag extends Component
     }
 
     // 클릭하여 하위로 이동
-    public function sort_down($id)
+    public function move_down($id)
     {
         $row = DB::table($this->actions['table'])->find($id);
 
