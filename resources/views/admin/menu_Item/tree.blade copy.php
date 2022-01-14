@@ -3,6 +3,9 @@
 
     <style>
         .jiny.tree ul {
+
+
+
             padding:0;
             margin-left:30px;
             /*
@@ -20,7 +23,7 @@
 
         .jiny.tree li {
             /*display:flex;*/
-            padding: 5px 0 5px 5px;
+            padding: 5px;
 
             border-left-color: gray;
             border-left-width: 1px;
@@ -101,52 +104,42 @@
                 tag[i] = tag[i].toUpperCase();
             }
             let status = true;
-            //console.log("찾기....")
-            //console.log(el)
             while(status) {
                 for(i=0;i<tag.length;i++) {
                     if(el.tagName == tag[i]) status = false;
                 }
                 if(status == true) {
-                    if(el) {
-                        if(el.classList) {
-                            //console.log(el);
-                            if(el.classList.contains('root')) return null;
-                        } else {
-                            //console.log("class list가 없어요")
-                        }
-                    } else {
-                        //console.log("el 이 없어요")
-                    }
-
                     el = el.parentElement;
-                    //sif(el.tagName == "FORM") return null;
+                    if(el.tagName == "BODY") break;
                 }
             }
             return el;
         }
 
+
+
+        const leafs = document.querySelectorAll('.drag-node');
         const jinyTree = document.querySelector('.jiny.tree');
-        //jinyTree.setAttribute('draggable', "true");
-
-
+        //console.log(jinyTree);
+        jinyTree.setAttribute('draggable', "true");
         let dragStart = null;
         let dragTarget = null;
         let dragOver = null;
-
         jinyTree.addEventListener('dragstart', (e) => {
-            // node만 선택할 수 있음
-            let target = findTagsParent(e.target, ['li']);
-            if(target.classList.contains('drag-node')) {
-                console.log("start=노드선택");
-                dragStart = target;
-                dragStart.classList.add('dragging'); // 드래깅 상태 클래스 표시
-                //console.log(dragStart);
+            console.log("dragstart");
+            // ul은 선택할 수 없음.
+            dragStart = findTagsParent(e.target, ['li']);
+            if(dragStart.classList.contains('drag-node')) {
+                if(dragStart) {
+                    console.log(dragStart);
+                    dragStart.classList.add('dragging');
+                }
             } else {
-                dragStart = null; // 초기화
+                dragStart = null;
+                console.log("드래그 할 수 없습니다.");
             }
-        });
 
+        });
         jinyTree.addEventListener('dragover', e => {
             e.preventDefault();
         });
@@ -158,101 +151,58 @@
         });
         jinyTree.addEventListener('drop', (e) => {
             e.preventDefault();
-            if(dragStart) {
-                console.log("drop");
-                let status = false;
-                let target = findTagsParent(e.target, ['li','ul']);
-
-                if(target.tagName == "UL") {
-                    // 1. ul선택
-                    console.log("ul은 대상이 될 수 없습니다.");
-                }  else if(target.tagName == "LI") {
-                    // 2. li선택
-                    dragMoveToLi(dragStart, target);
-                    status = true;
-                }
-
-                // 드래그 동작이 성공인 경우, ajax를 통하여 서버에 저장
-                if(status) {
-                    // 서버로 정보 전송
-                    ajaxMenuDropSync();
-                }
-
-            } else {
-                console.log("drag가 선택되어 있지 않습니다.");
+            console.log("drop");
+            let target = findTagsParent(e.target, ['li','ul']);
+            //console.log(target);
+            //dragTarget = target;
+            if(target.tagName == "UL") {
+                // 1. ul선택
+                console.log("ul은 대상이 될 수 없습니다.");
+            }  else {
+                // 2. li선택
+                dragMoveToLi(dragStart, target);
             }
+
+            // 서버로 정보 전송
+            ajaxMenuDropSync();
+
         });
         jinyTree.addEventListener('dragend', (e) => {
             console.log("dragend");
-            if(dragStart) {
-                if(dragStart.classList.contains('dragging')) {
-                    dragStart.classList.remove('dragging');
-                    dragStart = null;
-                }
+            //let target = findTagsParent(e.target, 'li');
+
+            if(dragStart && dragStart.classList.contains('dragging')) {
+                dragStart.classList.remove('dragging');
             }
+            //dragStart = null;
+            //dragTarget = null;
         });
 
-        /* 이동하고자 하는 대상의 자기 자신의 자식들인지 체크함 */
-        function checkDropChild(dragTarget) {
-            // drag-node가 아닌 cteate노드는 level값이 없어 계층 확인이 어려움.
-            let target;
-            if(!dragTarget.classList.contains('drag-node')) {
-                // 실제 drag-node 찾기
-                target = findTagsParent(dragTarget.parentElement, ['li']);
-                //console.log("노드찾기")
-                //console.log(target)
-            } else {
-                //console.log("노드검사")
-                target = dragTarget; //findTagsParent(dragTarget, ['li']);
-            }
-
-            console.log("동일계층 checking....")
-            //let parent = findTagsParent(dragTarget, ['li']);
-            //console.log("source")
-            //console.log(dragStart);
-            while(target.dataset['id'] != dragStart.dataset['id']) {
-
-                if(parseInt(target.dataset['level']) == 1) return false;
-                //console.log("level=" + target.dataset['level']);
-                //console.log("target")
-                //console.log(target)
-                //console.log("target id=" + target.dataset['id']);
-                //console.log("start id=" +  dragStart.dataset['id']);
-
-
-                target = findTagsParent(target.parentElement, ['li']);
-            }
-
-            //console.log("target id=" + target.dataset['id'] + ", start id=" + dragStart.dataset['id'])
-            return true;
-        }
-
         function dragMoveToLi(dragStart, dragTarget) {
-            // 검사1.
             if(dragStart == dragTarget) {
                 console.log("자기 자신은 이동할 수 없습니다.");
                 return;
             }
-            // 검사2,
+
             if(checkDropChild(dragTarget)) {
                 console.log("동일계층 하위로 이동 할 수 없습니다.")
                 return;
             }
 
+
             // 드래그 노드 (이동, 맞교환, 추가동작)
             if(dragTarget.classList.contains('drag-node')) {
                 console.log("Li 노드에 드래그 되었습니다.");
-                dragTargetToNode(dragStart, dragTarget);
+                dragMoveToNode(dragStart, dragTarget);
             } else
             // 추가버튼 drop (추가동작)
-            if(dragTarget.classList.contains('create')) {
+            if(dragTarget.classList.contains('create-sub-li')) {
                 console.log("추가 버튼에 드래그 되었습니다.");
-                dragTargetToCreate(dragStart, dragTarget);
+                dragMoveToCreate(dragStart, dragTarget);
             }
         }
 
-        function dragTargetToNode(dragStart, dragTarget) {
-
+        function dragMoveToNode(dragStart, dragTarget) {
             // 부모노드 검사
             // 부모가 같으면 노간 순서를 교환합니다.
             if(dragTarget.parentElement == dragStart.parentElement) {
@@ -268,102 +218,89 @@
                 console.log("다른 노드로 이동합니다.");
                 targetNext = dragTarget.nextElementSibling; // 대상 삽입위치 지정
 
-                // 상위 노드값을 통하여
-                // 이동노드의 ref, level 갑을 변경합니다.
-                let parent = findTagsParent(dragTarget.parentElement, ['li']); //dragTarget.parentElement;
-                //console.log(parent);
-                if(parent) {
-                    dragStart.dataset.ref = parent.dataset['id']; //부모 참조값 변경
-                    dragStart.dataset.level = parseInt(parent.dataset['level']) + 1; // data 속성변경
-                } else {
-                    // root 노드로 이동
-                    console.log("root 노드");
-                    dragStart.dataset.ref = 0;
-                    dragStart.dataset.level = 1;
-                }
-
+                // 이동정보 ref, level 갑을 변경합니다.
+                let parent = dragTarget.parentElement;
+                dragStart.dataset.ref = parent.dataset['id']; //부모 참조값 변경
+                dragStart.dataset.level = parseInt(parent.dataset['level']) + 1; // data 속성변경
 
                 // 기존 노드를 새로운 노드로 이동합니다.
                 dragTarget.parentElement.insertBefore(dragStart, targetNext);
-
-                //
             }
-
-            //console.log(dragStart)
-
         }
 
         /* 생성 버튼 노트로 drop한 경우 처리*/
-        function dragTargetToCreate(dragStart, dragTarget) {
-
-            //console.log(dragTarget);
-
-
+        function dragMoveToCreate(dragStart, dragTarget) {
+            console.log("서브 노드가 추가됩니다.");
             // 동일 노드 검사
             // 예) 같은노드에서 +버튼으로 드래그하는 경
-            let parentTarget = findTagsParent(dragTarget.parentElement, ['li']);
-            let parentStart = findTagsParent(dragStart.parentElement, ['li']);
-            if(parentTarget == parentStart) {
+            if(dragTarget.parentElement == dragStart.parentElement) {
                 console.log("동일한 부모노드 입니다. 서브등록을 취소합니다.");
-            } else
-            // 서브등록
-            {
-                //console.log("서브 노드가 추가됩니다.");
+            }
+            // + 버튼에 drop, 여기로 이동합니다.
+            else {
+                // 기본적으로 버튼 li가 선택됩니다.
+                // 상위 Li 찾기 li > ul > li item
+                let parent = dragTarget.parentElement.parentElement;
 
                 console.log("선택한 노드를 새로운 노드에 이동합니다.");
-                dragStart.dataset.ref = parentTarget.dataset['id'];
-                dragStart.dataset.level = parseInt(parentTarget.dataset['level']) + 1;  // data 속성변경
-
-                // ul에 자식 추가
+                dragStart.dataset.ref = parent.dataset['id'];
+                dragStart.dataset.level = parseInt(parent.dataset['level']) + 1;  // data 속성변경
                 dragTarget.parentElement.appendChild(dragStart);
-                //console.log(dragStart)
             }
         }
 
+        /* 이동하고자 하는 대상의 자기 자신의 자식들인지 체크함 */
+        function checkDropChild(dragTarget) {
+            console.log("동일계층 checking....")
+            let parent = findTagsParent(dragTarget, ['li']);
+            console.log(parent);
 
+            while (parent.dataset['level'] > 0) {
+                if(parent == dragStart) {
+                    return true;
+                } else {
+                    parent = parent.parentElement;
+                }
+            }
+            return false;
+        }
 
 
         function ajaxMenuDropSync() {
             // 변경된 노드를 다시 확인
             let node = jinyTree.querySelectorAll('.jiny.tree > ul > li.drag-node');
-
+            let ipos=0;
             let aaa=[];
             function __treepos(node) {
-                //let pos = [];
+                let pos = [];
                 node.forEach(el => {
-                    //console.log(el);
-                    /*
+                    console.log(el);
                     id = el.dataset['id'];
+                    ipos++;
                     pos[id] = {
                         'id':id,
                         'level':el.dataset['level'],
                         'ref':el.dataset['ref'],
                         'pos':el.dataset['pos'],
+                        'ipos':ipos,
                         'sub':null
                     };
                     aaa.push(pos[id]);
-                    */
 
-                    //pos = {;
-                    aaa.push({
-                        'id':el.dataset['id'],
-                        'level':el.dataset['level'],
-                        'ref':el.dataset['ref'],
-                        'pos':el.dataset['pos']
-                    });
-
-                    if(sub = el.querySelectorAll('[data-ref="'+el.dataset['id']+'"].drag-node')) {
-                        //pos[id].sub =
-                        __treepos(sub);
+                    if(sub = el.querySelectorAll('[data-ref="'+id+'"].drag-node')) {
+                        pos[id].sub = __treepos(sub);
                     }
 
                 });
 
-                //return pos;
+                return pos;
             }
 
-             __treepos(node);
-
+            let sortpos = __treepos(node);
+            //console.log( sortpos );
+            console.log( aaa );
+            //const JsonArray = JSON.stringify(aaa[0]);
+            //console.log(JsonArray);
 
             let xhr = new XMLHttpRequest();
             xhr.open("POST", "/api/menu/pos");

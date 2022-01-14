@@ -62,6 +62,8 @@ class WireTreeDrag extends Component
             }
         }
 
+        //dd($tree);
+
 
 
         // 계층이동

@@ -14,32 +14,47 @@ class Tree
 
     public function make()
     {
-        $ul = $this->ul($this->tree, ['ref'=>0]);
-        $ul->addClass('root');
-        return $ul;
-    }
+        $ul = $this->ul($this->tree, ['id'=>0, 'level'=>0, 'ref'=>0, 'pos'=>0]);
 
-    private function btnCreateLi($item)
-    {
-        $li = new \Jiny\Html\CTag('li',true);
-        $li->addItem($this->btnSubMenu($item['ref']));
-        $li->addItem("서브메뉴 생성 또는 tree를 드래그 하세요.");
-        $li->addClass("create");
-        $li->addClass("bg-gray-100");
-        return $li;
+        // 트리 계층관리 초기값
+        //$ul->setAttribute('data-level', 0);
+        //$ul->setAttribute('data-ref', 0);
+        //$ul->setAttribute('data-pos', 0);
+
+        return $ul;
     }
 
     private function ul($tree, $item)
     {
         $ul = new CTag('ul', true);
 
+        // 트리 계층관리 초기값
+        $ul->setAttribute('data-id', $item['id']);
+        $ul->setAttribute('data-level', $item['level']);
+        $ul->setAttribute('data-ref', $item['ref']);
+        $ul->setAttribute('data-pos', $item['pos']);
+
         // 서브트리 생성 버튼
-        $ul->addFirstItem($this->btnCreateLi($item));
+        $ul->addFirstItem(
+            (new \Jiny\Html\CTag('li',true))
+            ->addItem(
+                $this->btnSubMenu($item['ref'])
+            )
+            ->setAttribute('data-level', $item['level'])
+            ->addClass("create-sub-li")
+        );
 
         foreach($tree as $item) {
             $li = $this->li($item);
             $ul->addItem($li);
         }
+
+        /*
+        $dropzone = xDiv();
+        $dropzone->addClass("dropzone");
+        $ul->addItem($dropzone);
+        */
+
         return $ul;
     }
 
@@ -63,10 +78,37 @@ class Tree
         if(isset($item['sub'])) {
             $li->addItem($this->ul($item['sub'], $item));
         } else {
+            // subzone을 위한 빈 ul 등록
             $ul = new CTag('ul', true);
-            // 서브트리 생성 버튼
-            $ul->addFirstItem($this->btnCreateLi($item));
+
+            // 트리 계층관리 초기값
+            $ul->setAttribute('data-id', $item['id']);
+            $ul->setAttribute('data-level', $item['level']);
+            $ul->setAttribute('data-ref', $item['ref']);
+            $ul->setAttribute('data-pos', $item['pos']);
+
+            $ul->addFirstItem(
+                (new \Jiny\Html\CTag('li',true))
+                ->addItem(
+                    // 서브등록
+                    $this->btnSubMenu($item['id'])
+                )
+                ->setAttribute('data-level', $item['level'])
+                //->setAttribute('data-ref', $item['ref'])
+                //->setAttribute('data-pos', $item['pos'])
+                ->addClass("create-sub-li")
+
+
+            )->addClass("create-sub-ul");
+
+            /*
+            $dropzone = xDiv();
+            $dropzone->addClass("dropzone");
+            $ul->addItem($dropzone);
+            */
+
             $li->addItem($ul);
+
         }
 
         return $li;
@@ -90,9 +132,9 @@ class Tree
         //$leftBox->addItem($icon_arrow);
 
         // 위치정보
-
-        $leftBox->addItem( "Id:".$item['id']."/"."ref:".$item['ref']."/" );
-
+        /*
+        $leftBox->addItem( "Id:".$item['id']."/"."pos:".$item['pos']."/" );
+        */
 
         // 메뉴 수정링크
         $link = (clone $_a)
