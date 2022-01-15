@@ -1,6 +1,7 @@
 {{-- 목록을 출력하기 위한 템플릿 --}}
 <x-theme theme="admin.sidebar2">
     <x-theme-layout>
+
         <!-- start page title -->
         @if (isset($actions['view_title']) && !empty($actions['view_title']))
             @includeIf($actions['view_title'])
@@ -8,6 +9,8 @@
             @include("jinytable::title")
         @endif
         <!-- end page title -->
+
+
 
         <style>
             .directory ul {
@@ -25,6 +28,7 @@
             }
         </style>
 
+
         <x-card>
             <x-card-header>
                 <ul class="p-0 m-0">
@@ -37,19 +41,21 @@
                 </ul>
             </x-card-header>
             <x-card-body>
-                {{-- Live 디렉터리를 출력합니다. --}}
-                @livewire('FileManager', [
+
+                @livewire('FileExplore', [
                     'actions' => $actions,
                     'path' => '/resources/menus'
                 ])
+
             </x-card-body>
         </x-card>
+
 
         <!-- dropzone -->
         @include("jinyfile::script.drop")
 
 
-        {{-- Admin Rule Setting --}}
+
         @include('jinytable::setActionRule')
 
     </x-theme-layout>

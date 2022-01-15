@@ -18,6 +18,15 @@
             </x-form-hor>
 
             <x-form-hor>
+                <x-form-label>해더제목 </x-form-label>
+                <x-form-item>
+                    {!! xCheckbox()
+                        ->setWire('model.defer',"forms.header")
+                    !!}
+                </x-form-item>
+            </x-form-hor>
+
+            <x-form-hor>
                 <x-form-label>제목</x-form-label>
                 <x-form-item>
                     {!! xInputText()

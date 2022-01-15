@@ -17,40 +17,14 @@ Route::middleware(['web','auth:sanctum', 'verified'])
     ## 메뉴 아이템 설정
     Route::get('menus/items/{id}',[\Jiny\Menu\Http\Controllers\Admin\MenuItemController::class,"index"]);
 
-    ## 메뉴 코드
+    ## 메뉴 파일
     Route::resource('menu/file', \Jiny\Menu\Http\Controllers\Admin\MenuFileController::class);
-
-    // 메뉴 설정
-    //xMenu()->setPath("menus/6.json");
-
-    /*
-    Route::prefix('/site')->name('site.')->group(function () {
-
-
-    });
-    */
-
-    /*
-
-
-    if(isset($user->menu)) {
-            ## 사용자 지정메뉴 우선설정
-            xMenu()->setPath($user->menu);
-        } else {
-            ## 설정에서 적용한 메뉴
-            if(isset($this->actions['menu'])) {
-                $menuid = _getKey($this->actions['menu']);
-                xMenu()->setPath($this->MENU_PATH . DIRECTORY_SEPARATOR . $menuid . ".json");
-            }
-        }
-
-        */
-
-
 
 });
 
-
+/** ----- ----- ----- ----- -----
+ *  menu ajax api 설정
+ */
 Route::middleware(['web','auth:sanctum', 'verified'])
 ->prefix('/api')->group(function () {
     Route::post('menu/pos',[\Jiny\Menu\API\Controllers\Pos::class,"index"]);

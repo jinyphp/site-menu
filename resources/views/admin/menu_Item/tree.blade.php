@@ -51,7 +51,6 @@
 
         .jiny.tree .title-right {
             padding: 0 5px;
-            flex-flow: 1;
         }
 
         .jiny.tree li > div:hover {
@@ -82,6 +81,7 @@
         }
     </style>
 
+    {!! xMenuSelect($code->id, false) !!}
     <h2>{{ $code->code }}</h2>
     {{ $code->description }}
     <hr>

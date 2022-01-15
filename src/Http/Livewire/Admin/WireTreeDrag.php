@@ -23,7 +23,7 @@ class WireTreeDrag extends Component
             ## row 데이터를 계층형으로 tree 구조를 생성합니다.
             $tree = $this->toTree($rows); //전처리
             $this->tree = $tree;
-
+            //dd($this->tree);
             return view($this->actions['view_list'])
                 ->with([
                     'code'=>$code,
@@ -46,6 +46,7 @@ class WireTreeDrag extends Component
             ->orderBy('level',"desc")
             ->orderBy('pos',"asc")
             ->get();
+        //dd($rows);
         return $rows;
     }
 
@@ -80,7 +81,7 @@ class WireTreeDrag extends Component
 
 
         return $tree;
-        return $this->sortByPos($tree);
+        //return $this->sortByPos($tree);
     }
 
     private function sortByPos($items)

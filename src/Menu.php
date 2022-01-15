@@ -23,15 +23,16 @@ class Menu
         }
     }
 
+    ## 메뉴 경로를 설정합니다.
     public $path;
-    public $tree;
-    public $menu_id;
-
     public function setPath($path)
     {
         $this->path = $path;
         return $this;
     }
+
+    public $tree;
+    public $menu_id;
 
     // json 파일 읽기
     public function load()
@@ -44,8 +45,8 @@ class Menu
             } else {
                 $this->tree = [];
             }
-
         } else {
+            // 경로가 없는 경우 빈 메뉴 배열을 반환합니다.
             $this->tree = [];
         }
 
@@ -56,10 +57,11 @@ class Menu
     public function build()
     {
         if (!empty($this->tree)) {
-            return (new \Jiny\Menu\MenuBuilder($this->tree))->make()->addClass("sidebar-nav");
+            $obj = new \Jiny\Menu\Builder\Bootstrap();
+            $obj->setData($this->tree);
+
+            return $obj->make()->addClass("sidebar-nav");
         }
     }
-
-
 
 }

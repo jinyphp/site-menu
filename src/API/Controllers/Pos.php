@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * 메뉴 아이템 - 마우스 drag and drop ajax 처리
+ */
 namespace Jiny\Menu\API\Controllers;
 
 use App\Http\Controllers\Controller;
@@ -17,15 +19,11 @@ class Pos extends Controller
 {
     public function index()
     {
-
         foreach($_POST['menu'] as $id => $menu) {
             DB::table('menu_items')
                 ->where('id', $id)
                 ->update($menu);
         }
-
-
-
 
         return response()->json([
             'post'=>$_POST
