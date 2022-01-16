@@ -25,6 +25,10 @@ abstract class MenuUI
     {
         //dd($this->menu);
         $uri = "/".$this->detectURI();
+        //dump($uri);
+        //dump($this->menu);
+        //dump($this->checkMenuUrl($this->menu, $uri));
+
         if( $current = $this->checkMenuUrl($this->menu, $uri) ) {
             //dd($current);
             $this->active = [ 'id' => $current['id'] ];
@@ -76,6 +80,7 @@ abstract class MenuUI
     private function checkMenuUrl($trees, $uri)
     {
         foreach($trees as $tree) {
+            //dump($tree);
             if(isset($tree['href']) && $tree['href']) {
                 if($tree['href'] == $uri) {
                     //dd($tree);
@@ -83,7 +88,10 @@ abstract class MenuUI
                 }
             }
             if(isset($tree['sub']) && $tree['sub']) {
-                return $this->checkMenuUrl($tree['sub'], $uri);
+                $sub = $this->checkMenuUrl($tree['sub'], $uri);
+                if($sub) {
+                    return $sub;
+                }
             }
         }
         return false;
