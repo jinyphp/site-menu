@@ -77,9 +77,16 @@ class Bootstrap extends MenuUI
             $item->addClass("active");
         }
 
+        /*
         if(isset($_COOKIE['__menu_active'])) {
             $active = json_decode($_COOKIE['__menu_active']);
             if($active->id == $value['id']) {
+                $item->addClass("active");
+            }
+        }
+        */
+        if(isset($this->active['id'])) {
+            if($this->active['id'] == $value['id']) {
                 $item->addClass("active");
             }
         }
@@ -154,12 +161,21 @@ class Bootstrap extends MenuUI
             $item->addClass("active");
         } else {
             // 트리만 선택할 경우, Active 확인
+            /*
             if(isset($_COOKIE['__menu_active'])) {
                 $active = json_decode($_COOKIE['__menu_active']);
                 if($active->id == $value['id']) {
                     $item->addClass("active");
                 }
             }
+            */
+            if(isset($this->active['id'])) {
+                if($this->active['id'] == $value['id']) {
+                    $item->addClass("active");
+                }
+            }
+
+
         }
 
         $item->addItem($submenu);

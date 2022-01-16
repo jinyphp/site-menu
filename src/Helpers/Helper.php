@@ -10,9 +10,11 @@ function xMenuPath() {
 
 }
 
+/*
 function xMenuJson($json) {
     return (new \Jiny\Menu\MenuBuilder($json))->make()->addClass("sidebar-nav");
 }
+*/
 
 
 function xMenuTree($tree) {

@@ -2,6 +2,7 @@
 namespace Jiny\Menu\Builder;
 use \Jiny\Html\CTag;
 /**
+ *  Admin Page용
  *  Tree UL을 생성합니다.
  */
 class Tree
@@ -76,8 +77,6 @@ class Tree
     {
         $_a = new CTag('a',true);
 
-
-
         // 위치정보
         //$leftBox->addItem( "Id:".$item['id']."/"."ref:".$item['ref']."/" );
 
@@ -131,7 +130,6 @@ class Tree
             ->addItem( $icon_plus )
             ->setAttribute('wire:click',"$"."emit('popupFormCreate','".$ref."')");
         $create->addClass("btn-create");
-        ////$create->additem($ref);
         return $create;
     }
 

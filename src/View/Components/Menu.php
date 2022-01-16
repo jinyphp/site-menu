@@ -30,13 +30,6 @@ class Menu extends Component
     {
         $content = "";
         if (!empty($this->jsondata)) {
-            /*
-            $uiBuilder = new \Jiny\Menu\Builder\MenuUI();
-            $uiBuilder->setData($this->jsondata);
-            $uiBuilder->make();
-
-            $content .= $uiBuilder->addClass("sidebar-nav");
-            */
             $content = \Jiny\Menu\Menu::instance()->build();
         }
 

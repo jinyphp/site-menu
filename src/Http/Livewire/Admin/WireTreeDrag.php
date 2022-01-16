@@ -20,10 +20,15 @@ class WireTreeDrag extends Component
 
             ## 메뉴데이터를 읽어 옵니다.
             $rows = $this->dbFetch($this->actions);
+
             ## row 데이터를 계층형으로 tree 구조를 생성합니다.
-            $tree = $this->toTree($rows); //전처리
-            $this->tree = $tree;
-            //dd($this->tree);
+            $trees = $this->toTree($rows); //전처리
+            foreach($trees as $tree) {
+                // view 전달시, key 이름으로 자동정렬 되기 때문에
+                // index로 변환하여 전달함.
+                $this->tree []= $tree;
+            }
+
             return view($this->actions['view_list'])
                 ->with([
                     'code'=>$code,

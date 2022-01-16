@@ -3,11 +3,9 @@
  * 메뉴 HTML UI 코드를 생성합니다.
  */
 namespace Jiny\Menu\Builder;
-
+use Illuminate\Support\Facades\Route;
 abstract class MenuUI
 {
-
-
     public $menu;
     public function __construct($data=null)
     {
@@ -25,6 +23,20 @@ abstract class MenuUI
 
     public function make($slot=null)
     {
+        //dd($this->menu);
+        $uri = "/".$this->detectURI();
+        if( $current = $this->checkMenuUrl($this->menu, $uri) ) {
+            //dd($current);
+            $this->active = [ 'id' => $current['id'] ];
+        } else {
+            if(isset($_COOKIE['__menu_active'])) {
+                $this->active = json_decode($_COOKIE['__menu_active'],true);
+            }
+        }
+        //dd($this->active);
+
+
+
         //Json Array Parsing
         $tree = $this->tree($this->menu);
 
@@ -55,7 +67,48 @@ abstract class MenuUI
         return $menu;
     }
 
+
+
     abstract public function menuHeader($value);
     abstract public function menuItem($value);
+
+    public $active;
+    private function checkMenuUrl($trees, $uri)
+    {
+        foreach($trees as $tree) {
+            if(isset($tree['href']) && $tree['href']) {
+                if($tree['href'] == $uri) {
+                    //dd($tree);
+                    return $tree;
+                }
+            }
+            if(isset($tree['sub']) && $tree['sub']) {
+                return $this->checkMenuUrl($tree['sub'], $uri);
+            }
+        }
+        return false;
+    }
+
+    private function detectURI()
+    {
+        // 라우터에서 uri 정보 확인
+        $uri = Route::current()->uri;
+
+        // uri에서 {} 매개변수 제거
+        $slug = explode('/', $uri);
+        foreach($slug as $key => $item) {
+            if($item[0] == "{") unset($slug[$key]);
+        }
+
+        // resource 컨트롤러에서 ~/create 는 삭제.
+        $last = count($slug)-1;
+        if($slug[$last] == "create") {
+            unset($slug[$last]);
+        }
+
+        $slugPath = implode("/",$slug); // 다시 url 연결.
+
+        return $slugPath;
+    }
 
 }
