@@ -1,4 +1,12 @@
 <?php
+/*
+ * jinyPHP
+ * (c) hojinlee <infohojin@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 use \Jiny\Html\CTag;
 use Illuminate\Support\Facades\DB;
 
@@ -36,7 +44,6 @@ function xMenuSelect($value=null, $enable=true) {
         $rows = $db->get();
     }
 
-    //dd($rows);
     $_option = new \Jiny\Html\CTag('option',true);
     foreach($rows as $row) {
         $option = clone $_option;
@@ -57,9 +64,6 @@ function xMenuSelect($value=null, $enable=true) {
 
     return $select;
 }
-
-
-
 
 
 if (!function_exists('xEnableText')) {

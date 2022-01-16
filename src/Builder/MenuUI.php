@@ -1,9 +1,19 @@
 <?php
-/**
- * 메뉴 HTML UI 코드를 생성합니다.
+/*
+ * jinyPHP
+ * (c) hojinlee <infohojin@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
+
 namespace Jiny\Menu\Builder;
 use Illuminate\Support\Facades\Route;
+
+/**
+ * 메뉴 UI를 위한 HTML 코드를 생성합니다.
+ * 템플릿 메소드로 UI 코드를 추출합니다.
+ */
 abstract class MenuUI
 {
     public $menu;
@@ -23,37 +33,31 @@ abstract class MenuUI
 
     public function make($slot=null)
     {
-        //dd($this->menu);
+        // Active 설정
         $uri = "/".$this->detectURI();
-        //dump($uri);
-        //dump($this->menu);
-        //dump($this->checkMenuUrl($this->menu, $uri));
-
         if( $current = $this->checkMenuUrl($this->menu, $uri) ) {
-            //dd($current);
+            // uri 주소가 있는 경우, 우선적용
             $this->active = [ 'id' => $current['id'] ];
         } else {
             if(isset($_COOKIE['__menu_active'])) {
+                // 쿠키값이 있는 경우, 적용
                 $this->active = json_decode($_COOKIE['__menu_active'],true);
             }
         }
-        //dd($this->active);
 
-
-
-        //Json Array Parsing
-        $tree = $this->tree($this->menu);
+        // menu 데이터를 기반으로 HTML Ul tree 테그를 생성합니다.
+        $obj = $this->tree($this->menu);
 
         if($slot) {
             // 추가 컨덴츠가 있는 경우, 덧부침
-            $tree->addHtml($slot);
+            $obj->addHtml($slot);
         }
 
         // menu ul테그 반환
-        return $tree;
+        return $obj;
     }
 
-    // 재귀호출 메소드
+    ## 재귀호출 메소드
     protected function tree($data = [])
     {
         $menu = CMenu();
@@ -72,21 +76,22 @@ abstract class MenuUI
     }
 
 
-
     abstract public function menuHeader($value);
     abstract public function menuItem($value);
+
 
     public $active;
     private function checkMenuUrl($trees, $uri)
     {
         foreach($trees as $tree) {
-            //dump($tree);
+            // uri 경로조건 체크
             if(isset($tree['href']) && $tree['href']) {
                 if($tree['href'] == $uri) {
-                    //dd($tree);
                     return $tree;
                 }
             }
+
+            // 서브메뉴 검사
             if(isset($tree['sub']) && $tree['sub']) {
                 $sub = $this->checkMenuUrl($tree['sub'], $uri);
                 if($sub) {

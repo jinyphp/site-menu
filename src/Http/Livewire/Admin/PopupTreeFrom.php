@@ -1,4 +1,11 @@
 <?php
+/*
+ * jinyPHP
+ * (c) hojinlee <infohojin@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Jiny\Menu\Http\Livewire\Admin;
 
@@ -71,7 +78,6 @@ class PopupTreeFrom extends PopupForm
 
         return $pos;
     }
-
 
     private function increasePositionAll($pos, $where=[])
     {

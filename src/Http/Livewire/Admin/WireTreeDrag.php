@@ -1,4 +1,11 @@
 <?php
+/*
+ * jinyPHP
+ * (c) hojinlee <infohojin@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Jiny\Menu\Http\Livewire\Admin;
 
@@ -51,26 +58,20 @@ class WireTreeDrag extends Component
             ->orderBy('level',"desc")
             ->orderBy('pos',"asc")
             ->get();
-        //dd($rows);
         return $rows;
     }
 
     private function toTree($rows)
     {
-
-        // 배열변환
         $tree = [];
 
+        // 배열변환
         foreach ($rows as $row) {
             $id = $row->id;
             foreach ($row as $key => $value) {
                 $tree[$id][$key] = $value;
             }
         }
-
-        //dd($tree);
-
-
 
         // 계층이동
         foreach($tree as $i => $item) {
@@ -81,12 +82,7 @@ class WireTreeDrag extends Component
             }
         }
 
-        //dd($tree);
-
-
-
         return $tree;
-        //return $this->sortByPos($tree);
     }
 
     private function sortByPos($items)

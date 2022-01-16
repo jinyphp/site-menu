@@ -1,6 +1,15 @@
 <?php
+/*
+ * jinyPHP
+ * (c) hojinlee <infohojin@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Jiny\Menu\Builder;
 use \Jiny\Html\CTag;
+
 /**
  *  Admin Page용
  *  Tree UL을 생성합니다.
@@ -112,7 +121,6 @@ class Tree
             );
         $flexbox->addItem($leftBox);
         //$flexbox->addItem($rightBox);
-
 
         $flexbox->addItem(xDiv($item['href'])->addClass('px-2'));
         $flexbox->addItem(xDiv($item['description'])->addClass('px-2'));

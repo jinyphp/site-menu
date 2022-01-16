@@ -1,13 +1,19 @@
 <?php
+/*
+ * jinyPHP
+ * (c) hojinlee <infohojin@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Jiny\Menu\Builder;
+use Jiny\UI\View\Components\Icon;
+
 /**
  *  탬플릿 메소드 패턴
  *  부트스트랩 스타일 메뉴 HTML UI 코드를 생성합니다.
  */
-namespace Jiny\Menu\Builder;
-
-use Jiny\UI\View\Components\Icon;
-
-
 class Bootstrap extends MenuUI
 {
     const ITEM = "sidebar-item";
@@ -77,14 +83,6 @@ class Bootstrap extends MenuUI
             $item->addClass("active");
         }
 
-        /*
-        if(isset($_COOKIE['__menu_active'])) {
-            $active = json_decode($_COOKIE['__menu_active']);
-            if($active->id == $value['id']) {
-                $item->addClass("active");
-            }
-        }
-        */
         if(isset($this->active['id'])) {
             if($this->active['id'] == $value['id']) {
                 $item->addClass("active");
@@ -161,21 +159,11 @@ class Bootstrap extends MenuUI
             $item->addClass("active");
         } else {
             // 트리만 선택할 경우, Active 확인
-            /*
-            if(isset($_COOKIE['__menu_active'])) {
-                $active = json_decode($_COOKIE['__menu_active']);
-                if($active->id == $value['id']) {
-                    $item->addClass("active");
-                }
-            }
-            */
             if(isset($this->active['id'])) {
                 if($this->active['id'] == $value['id']) {
                     $item->addClass("active");
                 }
             }
-
-
         }
 
         $item->addItem($submenu);
@@ -234,7 +222,7 @@ class Bootstrap extends MenuUI
             if($menu->isClass('active')) {
                 $content->setActive = true;
             }
-            //dd($content);
+
             $content->addItem($menu);
         }
 

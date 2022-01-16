@@ -105,8 +105,8 @@
     //let _collapse = getCookie("__menu_collapse");
     //console.log("__menu_collapse = " + _collapse );
 
-    let _active = getCookie("__menu_active");
-    console.log("__menu_active = " + _active );
+    //let _active = getCookie("__menu_active");
+    //console.log("__menu_active = " + _active );
 
     // 쿠키 생성 함수
     function setCookie(name,value,days) {

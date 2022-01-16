@@ -1,11 +1,17 @@
 <?php
+/*
+ * jinyPHP
+ * (c) hojinlee <infohojin@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Jiny\Menu;
+
 /**
  * 메뉴 생성을 처리할 수 있는 Loader
  */
-namespace Jiny\Menu;
-
-
-
 class Menu
 {
     /**
@@ -59,42 +65,10 @@ class Menu
     public function build()
     {
         if (!empty($this->tree)) {
-
-            // url 주소를 이용하여 쿠키값 변경
-            /*
-            $uri = "/".$this->detectURI();
-            //dump($uri);
-            if( $current = $this->checkMenuUrl($this->tree, $uri) ) {
-
-                $active = [ 'id' => $current['id'] ];
-                dump(json_encode($active));
-                //setcookie('__menu_active', "abcd", 36000, '/');
-
-
-
-                Cookie::queue(Cookie::make('__menu_active', json_encode($active), 36000));
-                //Cookie::make('__menu_active', json_encode($active), 36000);
-                //$_COOKIE['__menu_active'] == '{"id":940}';
-                dd($_COOKIE['__menu_active']);
-
-            }
-
-            //
-            */
-
-
-
-
-
-
             $obj = new \Jiny\Menu\Builder\Bootstrap();
             $obj->setData($this->tree);
             return $obj->make()->addClass("sidebar-nav");
         }
     }
-
-
-
-
 
 }

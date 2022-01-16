@@ -1,4 +1,11 @@
 <?php
+/*
+ * jinyPHP
+ * (c) hojinlee <infohojin@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Jiny\Menu\Http\Controllers\Admin;
 
@@ -30,20 +37,6 @@ class MenuItemController extends ResourceController
         $this->actions['view_list'] = "jinymenu::admin.menu_item.tree";
         $this->actions['view_form'] = "jinymenu::admin.menu_item.form";
 
-        // 메뉴 설정
-        /*
-        $user = Auth::user();
-        if(isset($user->menu)) {
-            ## 사용자 지정메뉴 우선설정
-            xMenu()->setPath($user->menu);
-        } else {
-            ## 설정에서 적용한 메뉴
-            if(isset($this->actions['menu'])) {
-                $menuid = _getKey($this->actions['menu']);
-                xMenu()->setPath(self::MENU_PATH.DIRECTORY_SEPARATOR.$menuid.".json");
-            }
-        }
-        */
     }
 
     // index 오버라이딩,
@@ -62,7 +55,5 @@ class MenuItemController extends ResourceController
     {
 
     }
-
-
 
 }
