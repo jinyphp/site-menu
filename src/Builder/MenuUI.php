@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 abstract class MenuUI
 {
     public $menu;
+    public $menu_id;
     public function __construct($data=null)
     {
         // 메뉴 데이터를 설정합니다.
@@ -45,8 +46,10 @@ abstract class MenuUI
             }
         }
 
+
         // menu 데이터를 기반으로 HTML Ul tree 테그를 생성합니다.
         $obj = $this->tree($this->menu);
+
 
         if($slot) {
             // 추가 컨덴츠가 있는 경우, 덧부침

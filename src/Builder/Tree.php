@@ -31,8 +31,14 @@ class Tree
 
     private function btnCreateLi($item)
     {
+        if(isset($item['id'])) {
+            $ref = $item['id'];
+        } else {
+            $ref = 0;
+        }
+
         $li = new \Jiny\Html\CTag('li',true);
-        $li->addItem($this->btnSubMenu($item['ref']));
+        $li->addItem($this->btnSubMenu($ref));
         $li->addItem("서브메뉴 생성 또는 tree를 드래그 하세요.");
         $li->addClass("create");
         $li->addClass("bg-gray-100");
@@ -101,6 +107,7 @@ class Tree
         $link->setAttribute("wire:click", "$"."emit('edit','".$item['id']."')");
         $flexbox->addItem( xEnableText($item, $link)->addClass('px-2') );
 
+        /*
         $leftBox = xDiv();
             // 상위이동
             $icon_up = xIcon($name="caret-up", $type="bootstrap")->setClass("w-3 h-3 inline-block");
@@ -121,6 +128,7 @@ class Tree
             );
         $flexbox->addItem($leftBox);
         //$flexbox->addItem($rightBox);
+        */
 
         $flexbox->addItem(xDiv($item['href'])->addClass('px-2'));
         $flexbox->addItem(xDiv($item['description'])->addClass('px-2'));

@@ -51,16 +51,17 @@
             <x-card-header>
             </x-card-header>
             <x-card-body>
-                @livewire('WireTreeDrag',['menu_id'=>$request->id, 'actions'=>$actions])
+                @livewire('WireTreeDrag',['menu_id'=>$request->menu_id, 'actions'=>$actions])
             </x-card-body>
             <x-card-footer>
-                @livewire('WireUpload',['menu_id'=>$request->id])
+                @livewire('WireUpload',['menu_id'=>$request->menu_id])
             </x-card-footer>
         </x-card>
 
 
         {{-- create/update/delete 처리 --}}
-        @livewire('PopupTreeFrom', ['menu_id'=>$request->id, 'actions'=>$actions])
+
+        @livewire('PopupTreeFrom', ['menu_id'=>$request->menu_id, 'actions'=>$actions])
 
         @livewire('Popup-LiveManual')
 

@@ -9,7 +9,7 @@
 
 namespace Jiny\Menu\Builder;
 use Jiny\UI\View\Components\Icon;
-
+use \Jiny\Html\CTag;
 /**
  *  탬플릿 메소드 패턴
  *  부트스트랩 스타일 메뉴 HTML UI 코드를 생성합니다.
@@ -17,6 +17,7 @@ use Jiny\UI\View\Components\Icon;
 class Bootstrap extends MenuUI
 {
     const ITEM = "sidebar-item";
+
 
     // 메뉴 타이틀
     public function menuHeader($value)
@@ -74,9 +75,21 @@ class Bootstrap extends MenuUI
         }
 
 
-        $item = CMenuItem()->addItem( $link );
+        $item = CMenuItem();
         $item->setAttribute('data-id', $value['id']);
         $item->setAttribute('data-ref', $value['ref']);
+
+        if ($this->admin) {
+            $item->addItem(
+                xDiv()
+                ->addItem($link)
+                ->addItem(xDiv($this->btnSubMenu($value['id']))->addClass('admin'))
+                ->addClass("flex")
+            ); // li item
+        } else {
+            $item->addItem( xDiv()->addItem($link) ); // li item
+        }
+
 
         // 선택처리
         if(isset($value['selected']) && $value['selected'] == true) {
@@ -140,15 +153,25 @@ class Bootstrap extends MenuUI
             $link->addItem( $title );
         }
 
-        $item = CMenuItem()->addItem( $link );
+        $item = CMenuItem();
         $item->setAttribute('data-id', $value['id']);
         $item->setAttribute('data-ref', $value['ref']);
         $item->addClass("sidebar-item");
 
+        if($this->admin) {
+            $item->addItem(
+                xDiv()
+                ->addItem($link)
+                ->addItem(xDiv($this->btnEditMenu($value['id']))->addClass('admin'))
+                ->addClass("flex")
+            ); // li item
+        } else {
+            $item->addItem( $link ); //li 컨덴츠 추가
+        }
+
+
         // 서브메뉴 체크용
         $item->addClass("menu-collapse");
-
-
 
         // 서브메뉴 트리 추가
         $submenu = $this->collapseContent($value['sub'], $open);
@@ -235,4 +258,38 @@ class Bootstrap extends MenuUI
         return null;
         return (new Icon($icon));
     }
+
+
+    /** ----- ----- ----- ----- -----
+     *  ui admin edit
+     */
+    public $admin = true;
+    private function btnSubMenu($ref)
+    {
+        $_a = new CTag('a',true);
+        $icon_plus = xIcon($name="plus-circle-dotted", $type="bootstrap")->setClass("w-1 h-1");
+
+        $data = ['ref'=>$ref, 'menu_id'=>$this->menu_id];
+
+        $create = (clone $_a)
+            ->addItem( $icon_plus )
+            //->setAttribute('wire:click',"create(".$ref.")");
+            ->setAttribute('href',"/admin/design/menu/".$this->menu_id."/items/create");
+
+        $create->addClass("btn-create");
+        return $create;
+    }
+
+    private function btnEditMenu($id)
+    {
+        $_a = new CTag('a',true);
+        $icon_plus = xIcon($name="gear", $type="bootstrap")->setClass("w-2 h-2");
+
+        $create = (clone $_a)
+            ->addItem( $icon_plus )
+            ->setAttribute('wire:click',"$"."emit('popupFormEdit','".$id."')");
+        $create->addClass("btn-create");
+        return $create;
+    }
+
 }

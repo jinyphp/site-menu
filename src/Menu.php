@@ -46,6 +46,8 @@ class Menu
     public function load()
     {
         if($this->path) {
+
+            // 메뉴 리소스 읽기
             $file = resource_path($this->path);
             if(file_exists($file)) {
                 $json = file_get_contents($file);
@@ -53,6 +55,13 @@ class Menu
             } else {
                 $this->tree = [];
             }
+
+            // 메뉴 code id 확인
+            $temp = explode(DIRECTORY_SEPARATOR, $this->path);
+            $t = array_key_last($temp);
+            $this->menu_id = str_replace(".json", "", $temp[$t]);
+            //dd($this->menu_id);
+
         } else {
             // 경로가 없는 경우 빈 메뉴 배열을 반환합니다.
             $this->tree = [];
@@ -67,6 +76,7 @@ class Menu
         if (!empty($this->tree)) {
             $obj = new \Jiny\Menu\Builder\Bootstrap();
             $obj->setData($this->tree);
+            $obj->menu_id = $this->menu_id;
             return $obj->make()->addClass("sidebar-nav");
         }
     }

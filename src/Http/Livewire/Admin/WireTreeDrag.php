@@ -30,6 +30,7 @@ class WireTreeDrag extends Component
 
             ## row 데이터를 계층형으로 tree 구조를 생성합니다.
             $trees = $this->toTree($rows); //전처리
+            $this->tree = []; //초기화
             foreach($trees as $tree) {
                 // view 전달시, key 이름으로 자동정렬 되기 때문에
                 // index로 변환하여 전달함.

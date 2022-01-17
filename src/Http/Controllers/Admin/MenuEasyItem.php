@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\DB;
  *  선택한 메뉴코드의 아이템을 관리합니다.
  */
 use Jiny\Table\Http\Controllers\ResourceController;
-class MenuItemController extends ResourceController
+class MenuEasyItem extends ResourceController
 {
     const MENU_PATH = "menus";
     public function __construct()
@@ -43,6 +43,8 @@ class MenuItemController extends ResourceController
     // 목록코드가 없는 경우 접속을 제한합니다.
     public function index(Request $request)
     {
+
+
         $menu_id = $request->menu_id;
         $code = DB::table('menus')->where('id',$menu_id)->first();
         if ($code) {
@@ -52,5 +54,42 @@ class MenuItemController extends ResourceController
         }
     }
 
+    /** ----- ----- ----- ----- -----
+     * Create 오버라이딩 및 후킹
+     */
+    public function create(Request $request)
+    {
+        return parent::create($request);
+    }
+
+
+    public function hookCreating($wire, $value)
+    {
+        //dd($wire->actions);
+        if(isset($wire->actions['nesteds']['ref'])) {
+            $wire->forms['ref'] = $wire->actions['nesteds']['ref'];
+        }
+
+        $wire->forms['menu_id'] = $wire->actions['nesteds']['menu_id'];
+    }
+
+    public function hookStoring($wire,$forms)
+    {
+        $forms['level'] = 1;
+        $forms['ref'] = 0;
+        $forms['pos'] = $this->maxPos($forms['menu_id']);
+
+        return $forms;
+    }
+
+    private function maxPos($menu_id)
+    {
+        // 선택한 메뉴의 최대 아이템값
+        $pos = DB::table($this->actions['table'])
+        ->where('menu_id',$menu_id)
+        ->count('pos')+1;
+
+        return $pos;
+    }
 
 }

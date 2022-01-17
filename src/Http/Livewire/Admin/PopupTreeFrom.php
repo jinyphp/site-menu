@@ -21,6 +21,7 @@ class PopupTreeFrom extends PopupForm
     ## 오버라이딩 메소드
     public function create($ref=null)
     {
+
         // 메뉴코드
         $this->forms['menu_id'] = intval($this->menu_id);
 
@@ -57,6 +58,7 @@ class PopupTreeFrom extends PopupForm
             $this->forms['level'] = 1;
             $this->forms['pos'] = $this->maxPos();
         }
+        //dd($this->forms);
 
         return parent::store();
     }
