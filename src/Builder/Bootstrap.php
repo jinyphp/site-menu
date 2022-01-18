@@ -23,7 +23,20 @@ class Bootstrap extends MenuUI
     public function menuHeader($value)
     {
         $obj = CMenuItem();
-        $obj->addItem($value['title']);
+
+        if($this->admin) {
+            $obj->addItem(
+                xDiv()
+                ->addItem($value['title'])
+                ->addItem(xDiv($this->btnEditMenu($value['id']))->addClass('admin'))
+                ->addClass("flex")
+            ); // li item
+        } else {
+            //$item->addItem( $link ); //li 컨덴츠 추가
+            $obj->addItem($value['title']);
+        }
+
+
         $obj->addClass("sidebar-header"); //bootstrap
 
         return $obj;
@@ -80,12 +93,17 @@ class Bootstrap extends MenuUI
         $item->setAttribute('data-ref', $value['ref']);
 
         if ($this->admin) {
-            $item->addItem(
-                xDiv()
+            $adminFlex = xDiv()
                 ->addItem($link)
-                ->addItem(xDiv($this->btnSubMenu($value['id']))->addClass('admin'))
-                ->addClass("flex")
-            ); // li item
+                ->addItem(
+                    xDiv()
+                    ->addItem($this->btnSubMenu($value['id'])) // 추가버튼
+                    ->addItem($this->btnEditMenu($value['id'])) // 수정버튼
+                    ->addClass('admin')
+                )
+                ->addClass("flex");
+
+            $item->addItem($adminFlex); // li item
         } else {
             $item->addItem( xDiv()->addItem($link) ); // li item
         }
@@ -263,7 +281,7 @@ class Bootstrap extends MenuUI
     /** ----- ----- ----- ----- -----
      *  ui admin edit
      */
-    public $admin = true;
+    public $admin = false;
     private function btnSubMenu($ref)
     {
         $_a = new CTag('a',true);
@@ -274,7 +292,7 @@ class Bootstrap extends MenuUI
         $create = (clone $_a)
             ->addItem( $icon_plus )
             //->setAttribute('wire:click',"create(".$ref.")");
-            ->setAttribute('href',"/admin/design/menu/".$this->menu_id."/items/create");
+            ->setAttribute('href',"/admin/easy/menu/".$this->menu_id."/items/create?ref=".$ref);
 
         $create->addClass("btn-create");
         return $create;
@@ -283,13 +301,14 @@ class Bootstrap extends MenuUI
     private function btnEditMenu($id)
     {
         $_a = new CTag('a',true);
-        $icon_plus = xIcon($name="gear", $type="bootstrap")->setClass("w-2 h-2");
+        $icon_gear = xIcon($name="gear", $type="bootstrap")->setClass("w-2 h-2");
 
-        $create = (clone $_a)
-            ->addItem( $icon_plus )
-            ->setAttribute('wire:click',"$"."emit('popupFormEdit','".$id."')");
-        $create->addClass("btn-create");
-        return $create;
+        $edit = (clone $_a)
+            ->addItem( $icon_gear )
+            //->setAttribute('wire:click',"$"."emit('popupFormEdit','".$id."')");
+            ->setAttribute('href',"/admin/easy/menu/".$this->menu_id.'/items/'.$id."/edit");
+        $edit->addClass("btn-create");
+        return $edit;
     }
 
 }

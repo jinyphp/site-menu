@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\DB;
  *  선택한 메뉴코드의 아이템을 관리합니다.
  */
 use Jiny\Table\Http\Controllers\ResourceController;
-class MenuEasyItem extends ResourceController
+class EasyMenuItem extends ResourceController
 {
     const MENU_PATH = "menus";
     public function __construct()
@@ -35,7 +35,7 @@ class MenuEasyItem extends ResourceController
         //$this->actions['view_title'] = "jinymenu::admin.menu_code.title";
         //$this->actions['view_filter'] = "jinymenu::admin.menu_code.filter";
         $this->actions['view_list'] = "jinymenu::admin.menu_item.tree";
-        $this->actions['view_form'] = "jinymenu::admin.menu_item.form";
+        $this->actions['view_form'] = "jinymenu::admin.menu_item.create";
 
     }
 
@@ -43,8 +43,6 @@ class MenuEasyItem extends ResourceController
     // 목록코드가 없는 경우 접속을 제한합니다.
     public function index(Request $request)
     {
-
-
         $menu_id = $request->menu_id;
         $code = DB::table('menus')->where('id',$menu_id)->first();
         if ($code) {
@@ -54,32 +52,41 @@ class MenuEasyItem extends ResourceController
         }
     }
 
+
     /** ----- ----- ----- ----- -----
-     * Create 오버라이딩 및 후킹
+     * Easy Create 오버라이딩 및 후킹
      */
     public function create(Request $request)
     {
         return parent::create($request);
     }
 
-
     public function hookCreating($wire, $value)
     {
-        //dd($wire->actions);
-        if(isset($wire->actions['nesteds']['ref'])) {
-            $wire->forms['ref'] = $wire->actions['nesteds']['ref'];
+        //dd($wire->request());
+        $req = $wire->request();
+        if(isset($req['query']['ref'])) {
+            $wire->forms['ref'] = $req['query']['ref'];
         }
 
         $wire->forms['menu_id'] = $wire->actions['nesteds']['menu_id'];
+        //dd($wire->forms);
     }
 
     public function hookStoring($wire,$forms)
     {
-        $forms['level'] = 1;
-        $forms['ref'] = 0;
         $forms['pos'] = $this->maxPos($forms['menu_id']);
+        $ref = $this->refRow($forms['ref']);
+        $forms['level'] = $ref->level + 1;
 
         return $forms;
+    }
+
+    private function refRow($ref)
+    {
+        //참조하는 상위 데이터를 읽어옵니다.
+        return DB::table($this->actions['table'])
+            ->find($ref);
     }
 
     private function maxPos($menu_id)
@@ -90,6 +97,21 @@ class MenuEasyItem extends ResourceController
         ->count('pos')+1;
 
         return $pos;
+    }
+
+    /** ----- ----- ----- ----- -----
+     * Easy store
+     */
+    public function store(Request $request)
+    {
+        $forms = [];
+        foreach($request->request as $key => $item) {
+            $forms[$key] = $item;
+        }
+
+
+
+        return '<script type="text/javascript">history.go(-2);</script>';
     }
 
 }

@@ -4,6 +4,9 @@
 
 {{-- 메뉴 활성화, collapse 상태 쿠키 저장 --}}
 @push('scripts')
+
+
+
 <script>
 
     function findTagsParent(el, tag) {

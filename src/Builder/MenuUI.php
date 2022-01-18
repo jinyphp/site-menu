@@ -49,6 +49,7 @@ abstract class MenuUI
 
         // menu 데이터를 기반으로 HTML Ul tree 테그를 생성합니다.
         $obj = $this->tree($this->menu);
+        $obj->setAttribute('data-code',$this->menu_id);
 
 
         if($slot) {

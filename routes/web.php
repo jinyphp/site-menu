@@ -26,10 +26,19 @@ Route::middleware(['web','auth:sanctum', 'verified'])
  */
 
 Route::middleware(['web','auth:sanctum', 'verified'])
-->name('admin.site.')
-->prefix('/admin/design')->group(function () {
-    //Route::resource('menu/{menu_id}/items', \Jiny\Menu\Http\Controllers\Admin\MenuItemController::class);
-    Route::get('/menu/{menu_id}/items/create/{ref}',[\Jiny\Menu\Http\Controllers\Admin\MenuEasyItem::class,"create"]);
+->name('admin.easy.')
+->prefix('/admin/easy')->group(function () {
+
+    Route::resource('/menu/{menu_id}/items',
+        \Jiny\Menu\Http\Controllers\Admin\EasyMenuItem::class);
+
+    /*
+    Route::get('/menu/{menu_id}/items/create/{ref}',
+        [\Jiny\Menu\Http\Controllers\Admin\EasyMenuItem::class,"create"])->name("menu.create");
+
+    Route::post('/menu/{menu_id}/items/create/{ref}',
+        [\Jiny\Menu\Http\Controllers\Admin\EasyMenuItem::class,"store"])->name("menu.store");
+    */
 });
 
 
