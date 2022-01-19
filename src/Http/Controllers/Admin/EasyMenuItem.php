@@ -35,7 +35,7 @@ class EasyMenuItem extends ResourceController
         //$this->actions['view_title'] = "jinymenu::admin.menu_code.title";
         //$this->actions['view_filter'] = "jinymenu::admin.menu_code.filter";
         $this->actions['view_list'] = "jinymenu::admin.menu_item.tree";
-        $this->actions['view_form'] = "jinymenu::admin.menu_item.create";
+        $this->actions['view_form'] = "jinymenu::admin.menu_item.form";
 
     }
 
@@ -108,8 +108,6 @@ class EasyMenuItem extends ResourceController
         foreach($request->request as $key => $item) {
             $forms[$key] = $item;
         }
-
-
 
         return '<script type="text/javascript">history.go(-2);</script>';
     }

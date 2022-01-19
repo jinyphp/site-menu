@@ -45,122 +45,37 @@ class Bootstrap extends MenuUI
     // 메뉴 아이템
     public function menuItem($value)
     {
-        $item = CMenuItem();
-
+        //서브메뉴 존재
         if(isset($value['sub'])) {
+            // 서브 메뉴출력
             $open = $this->checkCollapseStatus($value);
-
-            $sidebarItem = $this->sidebarItem($value, $open);
-            $sidebarItem->addClass("submenu"); // 서브메뉴 항목으로 설정표기 -> javascript에서 사용됨
-
-            // 서브메뉴 트리 추가
-            $submenu = $this->collapseContent($value['sub'], $open);
-            if(isset($submenu->setActive) && $submenu->setActive) {
-                // 하위 메뉴에서 Active 선택됨.
-                // Tree 에도 적용함
-                $sidebarItem->addClass("active");
-                $item->addClass("active"); // 상위트리 active 전달
-            } else {
-                // 트리만 선택할 경우, Active 확인
-                if($this->checkActive($value) ) {
-                    $sidebarItem->addClass("active");
-                    $item->addClass("active"); // 상위트리 active 전달
-                }
-            }
-
-            $item->addItem($sidebarItem);
-            $item->addItem($submenu);
-
-
+            $item = $this->collapseMenu($value, $open);
         } else {
-            $sidebarItem = $this->sidebarItem($value);
-
-            // Active 확인
-            if($this->checkActive($value) ) {
-                $sidebarItem->addClass("active");
-                $item->addClass("active"); // 상위트리 active 전달
-            }
-
-            $item->addItem($sidebarItem);
+            // 단일 항목
+            $item = $this->singleMenu($value);
         }
 
-        // context menu 용
         $item->setAttribute('data-id', $value['id']);
         $item->setAttribute('data-ref', $value['ref']);
+
+        $item->addClass("sidebar-item");
 
         return $item;
     }
 
     // 항목, active, collapse 클릭 대상
-    private function sidebarItem($value, $open=false)
+    private function sidebarItem($value)
     {
         $item = new CTag('div',true);
-        $item->addClass("sidebar-item");
-        $item->setAttribute('data-id', $value['id']);
-        $item->setAttribute('data-ref', $value['ref']);
-
-        // 클릭대상 아이템
-        $item->addItem($this->sidebarLink($value));
-
-        if(isset($value['sub'])) {
-            $this->collapse = uniqid("collapse_");
-
-            if($open) {
-                // 열린상태 true
-                $item->setAttribute("aria-expanded","true");
-            } else {
-                // 닫혀진 상태
-                $item->addClass("collapsed");
-                $item->setAttribute("aria-expanded","false");
-            }
-
-            $item->setAttribute("data-bs-toggle","collapse");
-            $item->setAttribute('href', "#".$this->collapse);
-
-            $item->setAttribute("role","button");
-            $item->setAttribute("aria-controls",$this->collapse);
-        }
 
         return $item;
     }
 
     private function sidebarLink($value)
     {
-        $link = new \Jiny\Html\CLink();
-        $link->addClass("sidebar-link"); //bootstrap
 
-        // 링크값 설정
-        if(isset($value['href']) && $value['href']) {
-            $link->setUrl($value['href']);
-        }
-
-        // 대상타켓 설정
-        if(isset($value['target']) && $value['target']) {
-            $link->setUrl($value['target']);
-        }
-
-        // 아이콘 추가
-        if(isset($value['icon']) && $value['icon'] ) {
-            $icon = $this->menuIcon($value['icon']);
-            $link->addItem($icon);
-        }
-
-        // 타이틀 추가
-        if(isset($value['title'])) {
-            $title = $this->spanTitle($value['title']);
-            $link->addItem( $title );
-        }
-
-        // 메뉴 id 설정
-        $link->setAttribute("data-menu", $value['id']);
-
-        return $link;
     }
 
-    private function spanTitle($title)
-    {
-        return CSpan($title)->addClass("align-middle");
-    }
 
     private function checkCollapseStatus($value)
     {
@@ -186,40 +101,6 @@ class Bootstrap extends MenuUI
         }
         return false;
     }
-
-    public function collapseContent($items, $open=false)
-    {
-        $content = CMenu();
-
-        // bootstrap collapse 속성
-        $content->addClass("sidebar-dropdown");
-        $content->addClass("list-unstyled");
-        $content->addClass("collapse");
-
-        if($open) {
-            $content->addClass("show"); //열린상태
-        }
-
-        $content->setAttribute("id",$this->collapse);
-        $this->collapse = null; // 재초기화...
-
-        foreach ($items as $item) {
-            $li = $this->menuItem($item);
-            if($li->isClass('active')) {
-                $content->setActive = true;
-            }
-
-            $content->addItem($li);
-        }
-
-        return $content;
-    }
-
-
-
-
-
-
 
     /** ----- ----- ----- ----- -----
      *  단일 메뉴항목
@@ -272,10 +153,41 @@ class Bootstrap extends MenuUI
     // 메뉴 링크
     private function menuLink($value)
     {
+        $link = new \Jiny\Html\CLink();
+        $link->addClass("sidebar-link"); //bootstrap
 
+        // 링크값 설정
+        if(isset($value['href']) && $value['href']) {
+            $link->setUrl($value['href']);
+        }
+
+        // 대상타켓 설정
+        if(isset($value['target']) && $value['target']) {
+            $link->setUrl($value['target']);
+        }
+
+        // 아이콘 추가
+        if(isset($value['icon']) && $value['icon'] ) {
+            $icon = $this->menuIcon($value['icon']);
+            $link->addItem($icon);
+        }
+
+        // 타이틀 추가
+        if(isset($value['title'])) {
+            $title = $this->spanTitle($value['title']);
+            $link->addItem( $title );
+        }
+
+        // 메뉴 id 설정
+        $link->setAttribute("data-menu", $value['id']);
+
+        return $link;
     }
 
-
+    private function spanTitle($title)
+    {
+        return CSpan($title)->addClass("align-middle");
+    }
 
 
     /** ----- ----- ----- ----- -----
@@ -285,7 +197,7 @@ class Bootstrap extends MenuUI
     public function collapseMenu($value, $open=false)
     {
         // collapse id 생성
-
+        $this->collapse = uniqid("collapse_");
 
         // li 테그
         $item = CMenuItem();
@@ -309,7 +221,20 @@ class Bootstrap extends MenuUI
         //li에 토클, collapse 속성 추가
         //$item->addClass("menu-collapse"); // jiny 서브메뉴 체크용
 
+        if($open) {
+            // 열린상태 true
+            $collapseBox->setAttribute("aria-expanded","true");
+        } else {
+            // 닫혀진 상태
+            $collapseBox->addClass("collapsed");
+            $collapseBox->setAttribute("aria-expanded","false");
+        }
 
+        $collapseBox->setAttribute("data-bs-toggle","collapse");
+        $collapseBox->setAttribute('href', "#".$this->collapse);
+
+        $collapseBox->setAttribute("role","button");
+        $collapseBox->setAttribute("aria-controls",$this->collapse);
 
         //$collapseBox->addClass("menu-item");
 
@@ -317,12 +242,51 @@ class Bootstrap extends MenuUI
         $item->addItem($collapseBox);
 
 
+        // 서브메뉴 트리 추가
+        $submenu = $this->collapseContent($value['sub'], $open);
+        if(isset($submenu->setActive) && $submenu->setActive) {
+            // 하위 메뉴에서 Active 선택됨.
+            // Tree 에도 적용함
+            $item->addClass("active");
+        } else {
+            // 트리만 선택할 경우, Active 확인
+            if($this->checkActive($value) ) {
+                $item->addClass("active");
+            }
+        }
 
+        $item->addItem($submenu);
 
         return $item;
     }
 
+    public function collapseContent($items, $open=false)
+    {
+        $content = CMenu();
 
+        // bootstrap collapse 속성
+        $content->addClass("sidebar-dropdown");
+        $content->addClass("list-unstyled");
+        $content->addClass("collapse");
+
+        if($open) {
+            $content->addClass("show"); //열린상태
+        }
+
+        $content->setAttribute("id",$this->collapse);
+        $this->collapse = null; // 재초기화...
+
+        foreach ($items as $item) {
+            $menu = $this->menuItem($item);
+            if($menu->isClass('active')) {
+                $content->setActive = true;
+            }
+
+            $content->addItem($menu);
+        }
+
+        return $content;
+    }
 
 
     public function menuIcon($icon=null)

@@ -36,95 +36,6 @@
 {{-- 메뉴 활성화, collapse 상태 쿠키 저장 --}}
 @push('scripts')
 <script>
-    /*
-    class ContextMenu {
-        constructor(target) {
-            console.log("contextMenu 설정");
-            this.element = target;
-            this.menu_id = target.dataset['code'];
-            console.log("menu_id = " + this.menu_id);
-
-            this.element.addEventListener('contextmenu', this.context);
-
-
-        }
-
-        context(e) {
-            e.preventDefault();
-            console.log(e.target);
-
-            let target = findTagsParent(e.target, ['li']);
-            console.log(target);
-
-
-
-            let contextMenu;
-            if(this.contextMenu) {
-                console.log("존재");
-                contextMenu = this.contextMenu;
-            } else {
-                console.log("생성");
-                // contextMenu = createSidebarContext(target.dataset['id']);
-
-                let id = target.dataset['id'];
-                let menu = document.createElement("ul");
-                menu.classList.add('context-menu');
-
-                let li, link;
-                li = document.createElement("li");
-                link = document.createElement("a");
-                link.innerHTML = "생성";
-                link.href = "/admin/easy/menu/"+this.menu_id+"/items/create?ref=" + id;
-                li.appendChild(link);
-                menu.appendChild(li);
-
-                li = document.createElement("li");
-                link = document.createElement("a");
-                link.innerHTML = "수정";
-                link.href = "/admin/easy/menu/" + this.menu_id + '/items/' + id + "/edit";
-                li.appendChild(link);
-
-                menu.appendChild(li);
-
-
-
-                this.contextMenu = menu;
-            }
-
-
-            let wrapper = document.querySelector(".wrapper");
-            wrapper.appendChild(this.contextMenu);
-
-            // context Menu활성화
-            this.contextMenu.style.display = 'block';
-            // top위치 구하기
-            var top;
-            if((e.clientY + this.contextMenu.offsetHeight)  > window.innerHeight) {
-                top = window.innerHeight - this.contextMenu.offsetHeight ;
-            } else {
-                top = e.clientY;
-            }
-            this.contextMenu.style.top =  top + "px";
-
-            // left 위치 구하기
-            var left;
-            if((e.clientX + this.contextMenu.offsetWidth) > window.innerWidth) {
-                left = window.innerWidth - this.contextMenu.offsetWidth ;
-            } else {
-                left = e.clientX;
-            }
-            this.contextMenu.style.left = left + 'px';
-
-        }
-
-    }
-
-    const sidebarNav = document.querySelector(".sidebar-nav");
-    let contextMenu = new ContextMenu(sidebarNav);
-
-    */
-
-
     // 메뉴 오른쪽 마우스 클릭
     const sidebarNav = document.querySelector(".sidebar-nav");
     const menu_id = sidebarNav.dataset['code'];
@@ -257,8 +168,9 @@
     //console.log(collapse)
     function _menu_collapse(target) {
         let id = target.dataset['id'];
-
-        if(target.classList.contains("menu-collapse")) {
+        //console.log("collapse 설정 변경");
+        //console.log(target);
+        if(target.classList.contains("submenu")) {
             //console.log("collapse menu");
             //console.log(collapse)
             if(collapse) {
@@ -296,15 +208,28 @@
         setCookie("__menu_active", JSON.stringify(active), 36000);
     }
 
+    // 링크클릭
     sidebarLinks.forEach(el => {
         el.addEventListener('click', function(e){
-            //e.preventDefault();
-            console.log("click");
-            //console.log(e.target);
-            let target = findTagsParent(e.target, ['li']);
+            console.log("sidebar-link click");
+            console.log(e.target);
+            // sidebar-item 찾기
+            let target = e.target;
+            while(!target.classList.contains('sidebar-item')) {
+                target = target.parentElement;
+            }
 
-            id = target.dataset['id'];
-            //console.log(target);
+            // 링크검사
+            let link = target.querySelector('a.sidebar-link');
+            //console.log(link);
+            if(link) {
+                if(link.href && link.href != "javascript:void(0)") {
+                    // 링크이동 허용
+                } else {
+                    e.preventDefault(); // 페이지 이동막기
+                }
+            }
+
 
             // 메뉴 collapse 쿠키 상태 저장
             _menu_collapse(target);
@@ -314,11 +239,11 @@
         });
     });
 
-    //let _collapse = getCookie("__menu_collapse");
-    //console.log("__menu_collapse = " + _collapse );
+    let _collapse = getCookie("__menu_collapse");
+    console.log("__menu_collapse = " + _collapse );
 
-    //let _active = getCookie("__menu_active");
-    //console.log("__menu_active = " + _active );
+    let _active = getCookie("__menu_active");
+    console.log("__menu_active = " + _active );
 
     // 쿠키 생성 함수
     function setCookie(name,value,days) {

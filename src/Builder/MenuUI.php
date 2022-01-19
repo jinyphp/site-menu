@@ -42,9 +42,11 @@ abstract class MenuUI
         } else {
             if(isset($_COOKIE['__menu_active'])) {
                 // 쿠키값이 있는 경우, 적용
-                $this->active = json_decode($_COOKIE['__menu_active'],true);
+                $this->active = json_decode($_COOKIE['__menu_active'], true);
             }
         }
+
+        //dump($this->active);
 
 
         // menu 데이터를 기반으로 HTML Ul tree 테그를 생성합니다.

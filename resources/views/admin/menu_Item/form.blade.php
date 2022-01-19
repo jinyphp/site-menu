@@ -1,6 +1,4 @@
 <div>
-
-    <input type="submit" value="submit">
         <x-navtab class="mb-3 nav-bordered">
             <!-- formTab -->
             <x-navtab-item class="show active" >
