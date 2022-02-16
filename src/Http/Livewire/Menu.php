@@ -16,7 +16,8 @@ use App\Models\Menus;
 
 class Menu extends Component
 {
-
+    public $css=[];
+    public $menuName;
     public $filename;
     public function mount($path=null)
     {
@@ -43,35 +44,20 @@ class Menu extends Component
         $tree = $this->load($menu_id);
 
 
-        $builder = new \Jiny\Menu\Builder\Bootstrap();
+        $builder = new \Jiny\Menu\Builder\Bootstrap($this->css);
         $builder->setData($tree);
         $builder->menu_id = $menu_id;
-        $menuTree = $builder->make()->addClass("sidebar-nav");
-        //dd($menuTree);
 
+        if(!$this->menuName) {
+            $this->menuName = "sidebar-nav";
+        }
+
+        $menuTree = $builder->make()->addClass($this->menuName);
 
         return view('jinymenu::livewire.menu', ['menuTree'=>$menuTree]);
     }
 
-    /*
-    public $adminDesign = false;
 
-    public $popupEsayMenu = false;
-    public function popupEasyMenuClose()
-    {
-        $this->popupEsayMenu = false;
-    }
-
-    public function popupEasyMenuOpen()
-    {
-        $this->popupEsayMenu = true;
-    }
-
-    public function create($ref)
-    {
-        $this->popupEasyMenuOpen();
-    }
-    */
 
     /** ----- ----- ----- ----- -----
      *
@@ -129,7 +115,6 @@ class Menu extends Component
 
         return $tree;
     }
-
 
 
 }

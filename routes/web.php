@@ -19,15 +19,16 @@ Route::middleware(['web','auth:sanctum', 'verified'])
     ## 메뉴 파일
     Route::resource('menu/file', \Jiny\Menu\Http\Controllers\Admin\MenuFileController::class);
 
-    // fure css Modal용
+
+    // fure css Modal test용
     Route::resource('modal/menu/code', \Jiny\Menu\Http\Controllers\Admin\ModalMenuController::class);
 
 });
 
+
 /** ----- ----- ----- ----- -----
  *  Design UI mode
  */
-
 Route::middleware(['web','auth:sanctum', 'verified'])
 ->name('admin.easy.')
 ->prefix('/admin/easy')->group(function () {

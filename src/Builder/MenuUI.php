@@ -16,13 +16,29 @@ use Illuminate\Support\Facades\Route;
  */
 abstract class MenuUI
 {
+    public $css = [];
     public $menu;
     public $menu_id;
-    public function __construct($data=null)
+    public function __construct($css=[])
     {
         // 메뉴 데이터를 설정합니다.
+        /*
         if ($data) {
             $this->menu = $data;
+        }
+        */
+
+
+
+        if(empty($css)) {
+            $this->css['sidebar_header'] = "sidebar-header";
+            $this->css['sidebar-item'] = "sidebar-item";
+            $this->css['sidebar-link'] = "sidebar-link";
+            $this->css['active'] = "active";
+            $this->css['sidebar-dropdown'] = "sidebar-dropdown";
+            $this->css['sidebar-show'] = "show";
+        } else {
+            $this->css = $css;
         }
     }
 
@@ -45,9 +61,6 @@ abstract class MenuUI
                 $this->active = json_decode($_COOKIE['__menu_active'], true);
             }
         }
-
-        //dump($this->active);
-
 
         // menu 데이터를 기반으로 HTML Ul tree 테그를 생성합니다.
         $obj = $this->tree($this->menu);
@@ -121,7 +134,7 @@ abstract class MenuUI
 
         // resource 컨트롤러에서 ~/create 는 삭제.
         $last = count($slug)-1;
-        if($slug[$last] == "create") {
+        if(isset($slug[$last]) && $slug[$last] == "create") {
             unset($slug[$last]);
         }
 

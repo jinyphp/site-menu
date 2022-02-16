@@ -168,10 +168,10 @@
     //console.log(collapse)
     function _menu_collapse(target) {
         let id = target.dataset['id'];
-        //console.log("collapse 설정 변경");
-        //console.log(target);
+        console.log("collapse 설정 변경");
+        console.log(target);
         if(target.classList.contains("submenu")) {
-            //console.log("collapse menu");
+            console.log("collapse menu");
             //console.log(collapse)
             if(collapse) {
 
@@ -182,9 +182,9 @@
             // 기존에 선택된 값이 있는경우, 삭제합니다.
             for(let i=0; i<collapse.length; i++) {
                 if(collapse[i].id == id) {
-                    //console.log("collapse 삭제");
+                    console.log("collapse 삭제");
                     collapse.splice(i, 1);
-                    //console.log(collapse)
+                    console.log(collapse)
                     // 쿠키를 변경합니다.
                     setCookie("__menu_collapse", JSON.stringify(collapse), 36000);
                     return;
@@ -215,7 +215,7 @@
             console.log(e.target);
             // sidebar-item 찾기
             let target = e.target;
-            while(!target.classList.contains('sidebar-item')) {
+            while(!target.classList.contains('sidebar-link')) {
                 target = target.parentElement;
             }
 

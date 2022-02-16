@@ -10,7 +10,7 @@
         @endif
         <!-- end page title -->
 
-        <x-button url="/admin/site/modal/menu/code" class="btn-modal" primary >모달팝업</x-button>
+        <x-button url="/admin/site/modal/menu/code/create?modal=true" class="btn-modal" primary >모달팝업</x-button>
 
 
         <div class="relative">

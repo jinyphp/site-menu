@@ -17,8 +17,8 @@ use Illuminate\Support\Facades\DB;
  *  Admin Page
  *  메뉴 목록을 관리합니다.
  */
-use Jiny\Table\Http\Controllers\ResourceController;
-class ModalMenuController extends ResourceController
+use Jiny\Table\Http\Controllers\AjaxResource;
+class ModalMenuController extends AjaxResource
 {
     public function __construct()
     {
@@ -31,22 +31,13 @@ class ModalMenuController extends ResourceController
         $this->actions['view_main'] = "jinymenu::admin.modal.menu_code.main";
         $this->actions['view_filter'] = "jinymenu::admin.modal.menu_code.filter";
         $this->actions['view_list'] = "jinymenu::admin.modal.menu_code.list";
-        $this->actions['view_form'] = "jinymenu::admin.modal.menu_code.create";
+        $this->actions['view_form'] = "jinymenu::admin.modal.menu_code.form";
 
     }
 
 
-    public function create(Request $request)
-    {
-        //return view("jinymenu::admin.modal.menu_code.create");
-        return view($this->actions['view_form'],['actions'=>$this->actions]);
-    }
 
-    public function store(Request $request)
-    {
-        dump($request);
-        return "aaa";
-    }
+
 
 
     public function hookDeleting($row)

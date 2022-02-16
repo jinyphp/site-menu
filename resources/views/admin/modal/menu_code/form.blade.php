@@ -13,6 +13,7 @@
                 <x-form-item>
                     {!! xCheckbox()
                         ->setName('enable')
+                        ->setValue( isset($forms['enable'])?$forms['enable']:"" )
                         ->setWire('model.defer',"forms.enable")
                     !!}
                 </x-form-item>
@@ -23,6 +24,7 @@
                 <x-form-item>
                     {!! xInputText()
                         ->setName('code')
+                        ->setValue(isset($forms['code'])?$forms['code']:"")
                         ->setWire('model.defer',"forms.code")
                         ->setWidth("standard")
                     !!}
@@ -33,6 +35,7 @@
                 <x-form-label>메모</x-form-label>
                 <x-form-item>
                     {!! xTextarea()
+                        ->setValue(isset($forms['description'])?$forms['description']:"")
                         ->setName('description')
                         ->setWire('model.defer',"forms.description")
                     !!}

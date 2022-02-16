@@ -10,7 +10,8 @@
 namespace Jiny\Menu;
 
 /**
- * 메뉴 생성을 처리할 수 있는 Loader
+ *  메뉴 헬퍼 클래스
+ *  메뉴트리를 생성을 처리할 수 있는 Loader
  */
 class Menu
 {
@@ -33,14 +34,14 @@ class Menu
 
     ## 메뉴 경로를 설정합니다.
     public $path;
+    public $tree;
+    public $menu_id;
+
     public function setPath($path)
     {
         $this->path = $path;
         return $this;
     }
-
-    public $tree;
-    public $menu_id;
 
     // json 파일 읽기
     public function load()
@@ -70,11 +71,13 @@ class Menu
         return $this;
     }
 
-    // Html tree 코드를 생성합니다.
-    public function build()
+    // Html UI tree를 생성합니다.
+    // 인자로 생성되는 알고리즘을 선택합니다.
+    public function build($algo="Bootstrap")
     {
+        $nameSpace = "\Jiny\Menu\Builder\\".$algo;
         if (!empty($this->tree)) {
-            $obj = new \Jiny\Menu\Builder\Bootstrap();
+            $obj = new $nameSpace ();
             $obj->setData($this->tree);
             $obj->menu_id = $this->menu_id;
             return $obj->make()->addClass("sidebar-nav");
