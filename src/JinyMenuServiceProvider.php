@@ -23,6 +23,9 @@ class JinyMenuServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         $this->loadViewsFrom(__DIR__.'/../resources/views', $this->package);
 
+        // 데이터베이스
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+
         //Blade::component(\Jiny\Admin\View\Components\Tree::class, "admin-tree");
 
         //메뉴 빌더를 호출

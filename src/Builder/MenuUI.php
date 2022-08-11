@@ -82,7 +82,7 @@ abstract class MenuUI
         $menu = CMenu();
 
         foreach($data as $key => $value) {
-            if(isset($value['header'])) {
+            if(isset($value['header']) && $value['header']) {
                 $item = $this->menuHeader($value);
             } else {
                 $item = $this->menuItem($value);

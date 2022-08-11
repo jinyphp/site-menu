@@ -10,6 +10,10 @@ Route::middleware(['web','auth:sanctum', 'verified'])
 ->name('admin.site.')
 ->prefix('/admin/site')->group(function () {
 
+    Route::get('/menu',function(){
+        return view('jinymenu::admin.dashboard');
+    });
+
     ## 메뉴 코드
     Route::resource('menu/code', \Jiny\Menu\Http\Controllers\Admin\MenuController::class);
 
@@ -18,7 +22,6 @@ Route::middleware(['web','auth:sanctum', 'verified'])
 
     ## 메뉴 파일
     Route::resource('menu/file', \Jiny\Menu\Http\Controllers\Admin\MenuFileController::class);
-
 
     // fure css Modal test용
     Route::resource('modal/menu/code', \Jiny\Menu\Http\Controllers\Admin\ModalMenuController::class);

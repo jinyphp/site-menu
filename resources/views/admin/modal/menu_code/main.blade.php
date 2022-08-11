@@ -1,5 +1,5 @@
 {{-- 목록을 출력하기 위한 템플릿 --}}
-<x-theme theme="admin.sidebar2">
+<x-theme theme="admin.sidebar">
     <x-theme-layout>
         모달팝업용
         <!-- start page title -->
