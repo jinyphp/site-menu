@@ -28,6 +28,7 @@ class Menu extends Component
 
         // 메뉴 데이터를 읽어 옵니다.
         $tree = \Jiny\Menu\Menu::instance()->load()->tree;
+        //dd($tree);
         $this->jsondata = $tree;
     }
 
@@ -45,6 +46,7 @@ class Menu extends Component
 
     public function render()
     {
-        return view('jinymenu::components.menu.menu');
+        $viewFile = "jinymenu".'::components.menu';
+        return view($viewFile.".menu");
     }
 }

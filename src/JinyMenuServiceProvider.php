@@ -29,11 +29,11 @@ class JinyMenuServiceProvider extends ServiceProvider
         //Blade::component(\Jiny\Admin\View\Components\Tree::class, "admin-tree");
 
         //메뉴 빌더를 호출
-        Blade::component(\Jiny\Menu\View\Components\Menu::class, "menu-json");
+        //Blade::component(\Jiny\Menu\View\Components\Menu::class, "menu-json");
 
         // 마우스 오른쪽 클릭메뉴
         // context
-        Blade::component(\Jiny\Menu\View\Components\Context::class, "context-menu");
+        //Blade::component(\Jiny\Menu\View\Components\Context::class, "context-menu");
     }
 
     public function register()
@@ -42,6 +42,7 @@ class JinyMenuServiceProvider extends ServiceProvider
         $this->app->afterResolving(BladeCompiler::class, function () {
             //Livewire::component('LiveTreeJson', \Jiny\Admin\Http\Livewire\LiveTreeJson::class);
 
+            /*
             ## Livewire::component('WireTree', \Jiny\Menu\Http\Livewire\Admin\WireTree::class);
             Livewire::component('WireTreeDrag', \Jiny\Menu\Http\Livewire\Admin\WireTreeDrag::class);
 
@@ -52,6 +53,7 @@ class JinyMenuServiceProvider extends ServiceProvider
             //Livewire::component('Admin-SiteMenu-Code', \Jiny\Menu\Http\Livewire\Admin\MenuCodeWire::class);
 
             Livewire::component('menu-json', \Jiny\Menu\Http\Livewire\Menu::class);
+            */
         });
 
     }

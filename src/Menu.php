@@ -75,6 +75,7 @@ class Menu
     // 인자로 생성되는 알고리즘을 선택합니다.
     public function build($algo="Bootstrap")
     {
+        //dd($this->tree);
         $nameSpace = "\Jiny\Menu\Builder\\".$algo;
         if (!empty($this->tree)) {
             $obj = new $nameSpace ();

@@ -2,6 +2,7 @@
 {{-- 데이터가 없는 경우 slot 데이터만 출력합니다. --}}
 {!! $builder($slot) !!}
 
+
 {{-- 메뉴 활성화, collapse 상태 쿠키 저장 --}}
 @push('scripts')
 

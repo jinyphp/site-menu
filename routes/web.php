@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 /** ----- ----- ----- ----- -----
  *  Site-Menu 관리자
  */
+/*
 Route::middleware(['web','auth:sanctum', 'verified'])
 ->name('admin.site.')
 ->prefix('/admin/site')->group(function () {
@@ -27,11 +28,14 @@ Route::middleware(['web','auth:sanctum', 'verified'])
     Route::resource('modal/menu/code', \Jiny\Menu\Http\Controllers\Admin\ModalMenuController::class);
 
 });
+*/
+
 
 
 /** ----- ----- ----- ----- -----
  *  Design UI mode
  */
+/*
 Route::middleware(['web','auth:sanctum', 'verified'])
 ->name('admin.easy.')
 ->prefix('/admin/easy')->group(function () {
@@ -40,12 +44,15 @@ Route::middleware(['web','auth:sanctum', 'verified'])
         \Jiny\Menu\Http\Controllers\Admin\EasyMenuItem::class);
 
 });
+*/
 
 
 /** ----- ----- ----- ----- -----
  *  menu ajax api 설정
  */
+/*
 Route::middleware(['web','auth:sanctum', 'verified'])
 ->prefix('/api')->group(function () {
     Route::post('menu/pos',[\Jiny\Menu\API\Controllers\Pos::class,"index"]);
 });
+*/
