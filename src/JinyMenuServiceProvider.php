@@ -16,7 +16,7 @@ use Livewire\Livewire;
 
 class JinyMenuServiceProvider extends ServiceProvider
 {
-    private $package = "jinymenu";
+    private $package = "jiny-menu";
     public function boot()
     {
         // 모듈: 라우트 설정
@@ -25,6 +25,12 @@ class JinyMenuServiceProvider extends ServiceProvider
 
         // 데이터베이스
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+
+        // 설정파일 복사
+        $this->publishes([
+            __DIR__.'/../config/setting.php' => config_path('jiny/menu/setting.php'),
+        ]);
+
 
         //Blade::component(\Jiny\Admin\View\Components\Tree::class, "admin-tree");
 
@@ -40,7 +46,7 @@ class JinyMenuServiceProvider extends ServiceProvider
     {
         /* 라이브와이어 컴포넌트 등록 */
         $this->app->afterResolving(BladeCompiler::class, function () {
-            //Livewire::component('LiveTreeJson', \Jiny\Admin\Http\Livewire\LiveTreeJson::class);
+            Livewire::component('WidgetMenu', \Jiny\Menu\Http\Livewire\WidgetSubMenu::class);
 
             /*
             ## Livewire::component('WireTree', \Jiny\Menu\Http\Livewire\Admin\WireTree::class);
