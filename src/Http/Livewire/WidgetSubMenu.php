@@ -7,10 +7,15 @@ use Illuminate\Support\Facades\DB;
 use Livewire\WithFileUploads;
 use Livewire\Attributes\On;
 
+/**
+ * 트리형 데이터를 이용하여 위젯을 구현합니다.
+ */
 class WidgetSubMenu extends Component
 {
     use WithFileUploads;
     use \Jiny\WireTable\Http\Trait\Upload;
+
+    use \Jiny\Widgets\Http\Trait\DesignMode;
 
     public $code; // = "arduino";
     public $actions = [];
@@ -19,6 +24,8 @@ class WidgetSubMenu extends Component
     public $post_id;
     public $edit_id;
     public $rows = [];
+    public $refs = []; // 트리노트 참조
+    public $max_idx = 0; //
     public $last_id;
 
     public $forms=[];
@@ -31,53 +38,130 @@ class WidgetSubMenu extends Component
     public $popupDelete = false;
     public $confirm = false;
 
+    public $viewFile = [];
+
 
     public function mount()
     {
         $this->reply_id = 0;
 
+        $this->load(); //데이터를 읽어옴
+
         $this->viewFormFile();
         $this->viewListFile();
         $this->viewListFileItem();
+        $this->viewLayoutFile();
+
+
     }
 
-    public function render()
-    {
-        // DB에서 데이터를 읽어 옵니다.
-        $rows = DB::table("menu_items")
-                ->where('code',$this->code)
-                ->orderBy('level',"desc")
-                ->get();
 
-        $this->rows = [];
-        foreach($rows as $item) {
-            $id = $item->id;
-            $this->rows[$id] = get_object_vars($item); // 객체를 배열로 변환
+    // 데이터를 읽어 옵니다.
+    private function load()
+    {
+        $path = resource_path("/menus"); // 메뉴리소스가 저장되어 있는 경로
+        if(!is_dir($path)) {
+            mkdir($path, 0777, true);
         }
 
-        // 트리로 변환합니다.
-        $this->tree();
+        if($this->code) {
+            $filename = $path.DIRECTORY_SEPARATOR.$this->code.".json";
+            if(file_exists($filename)) {
+                $json = file_get_contents($filename);
+                $widget = json_decode($json,true);
+            }
 
-        // 기본값
-        $viewFile = 'jiny-menu::widgets.layout';
-        return view($viewFile);
+            $widget['code'] = $this->code;
+        }
+
+        // 외부설정값 + 파일정보값 처리
+        if($widget) {
+            foreach($widget as $key => $item) {
+                $this->widget[$key] = $item;
+            }
+        }
+
+        // items 데이터 읽기
+        if($this->widget) {
+            if(isset($this->widget['items'])) {
+                $this->refs = $this->widget['items'];
+            }
+        }
+
     }
 
 
-    private function tree()
+    // 메뉴 설정값 저장
+    protected function save()
     {
-        foreach($this->rows as &$item) {
+        $path = resource_path("/menus");
+        if(!is_dir($path)) {
+            mkdir($path, 0777, true);
+        }
+
+        // 1차원 메뉴 목록을 저장
+        $this->widget['items'] = $this->refs;
+
+        // 파일저장
+        if($this->code) {
+            $filename = $path.DIRECTORY_SEPARATOR.$this->code.".json";
+            $jsonBody = json_encode($this->widget, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+            file_put_contents($filename, $jsonBody);
+        }
+    }
+
+
+    // 화면 랜더링
+    public function render()
+    {
+        // 트리로 변환합니다.
+        $this->rows = $this->tree($this->refs);
+
+        // 기본값
+        //$viewFile = 'jiny-menu::widgets.layout';
+        //dd($this->viewFile['layout']);
+        return view($this->viewFile['layout']);
+    }
+
+    private function tree($refs)
+    {
+        // 배열 정렬
+        usort($refs, function($a, $b) {
+            return $b['level'] - $a['level'];
+        });
+
+        $rows = [];
+        foreach($refs as $item) {
+            $id = $item['id'];
+            $rows[$id] = $item;
+        }
+
+        foreach($rows as &$item) {
             $id = $item['id'];
             if($item['ref']) {
                 $ref = $item['ref'];
-                if(!isset($this->rows[$ref]['items'])) {
-                    $this->rows[$ref]['items'] = [];
+                if(!isset($rows[$ref]['items'])) {
+                    $rows[$ref]['items'] = [];
                 }
-                $this->rows[$ref]['items'] []= $item;
+                $rows[$ref]['items'] []= $item;
 
-                unset($this->rows[$id]);
+                unset($rows[$id]);
             }
         }
+
+        return $rows;
+    }
+
+    private function viewLayoutFile()
+    {
+        $viewFile = 'jiny-menu::widgets.layout';
+
+        if(isset($this->widget['view']['layout'])) {
+            $viewFile = $this->widget['view']['layout'];
+        }
+
+        $this->viewFile['layout'] = $viewFile;
+        return $viewFile;
     }
 
     private function viewListFile()
@@ -121,28 +205,32 @@ class WidgetSubMenu extends Component
         'edit','popupEdit','popupCreate'
     ];
 
+    /**
+     * 신규 추가
+     */
     public function create($value=null)
     {
         $this->popupForm = true;
         $this->edit_id = null;
 
-        // 데이터초기화
-        $this->forms = [];
+        $this->forms = []; // 데이터초기화
         $this->forms['code'] = $this->code;
     }
 
     public function store()
     {
+        // 서브트리 추가
         if($this->reply_id) {
             $this->forms['ref'] = $this->reply_id;
 
             $id = $this->reply_id;
             $this->forms['level'] = $this->level + 1;
-        } else {
+        }
+        // 신규 루트 추가
+        else {
             $this->forms['ref'] = 0;
             $this->forms['level'] = 1;
         }
-
 
         // 2. 시간정보 생성
         $this->forms['created_at'] = date("Y-m-d H:i:s");
@@ -150,27 +238,26 @@ class WidgetSubMenu extends Component
 
         $form = $this->forms;
 
-        $id = DB::table("menu_items")->insertGetId($form);
+        $id = count($this->refs)+1;
         $form['id'] = $id;
-        $this->last_id = $id;
+        $this->refs[$id] = $form;
 
-        $this->forms = []; // 초기화
-        $this->reply_id = null;
-        $this->level = null;
-
-        $this->popupForm = false;
-        $this->edit_id = null;
+        //저장
+        $this->save();
+        $this->popupClose();
     }
 
 
+
+
+    // 트리의 데이터를 수정합니다.
     public $editmode=null;
     public function edit($id)
     {
         $this->editmode = "edit";
         $this->reply_id = $id;
 
-        $node = $this->findNode($this->rows, $id);
-        $this->forms = $node;
+        $this->forms = $this->refs[$id];
 
         $this->edit_id = $id;
         $this->popupForm = true;
@@ -178,25 +265,20 @@ class WidgetSubMenu extends Component
 
     public function update()
     {
-        // 수정폼에서 하위메뉴가 있는경우,
-        // 하위메뉴는 DB삽입이 되지 않기 때문에 삭제함
-        if(isset($this->forms['items'])) {
-            unset($this->forms['items']);
-        }
+        $id = $this->reply_id;
+        $this->refs[$id] = $this->forms;
 
-        DB::table("menu_items")
-            ->where('id',$this->reply_id)
-            ->update($this->forms);
-
-        $this->forms = [];
-        $this->editmode = null;
-        $this->reply_id = null;
-
-        $this->edit_id = null;
-        $this->popupForm = false;
+        //저장
+        $this->save();
+        $this->popupClose();
     }
 
-    // 수정메뉴에서, 하위 서브메뉴를 추가 생성모드로 변경
+
+
+    /**
+     * 수정메뉴에서,
+     * 하위 서브메뉴를 추가 생성모드로 변경
+     */
     public function submenu()
     {
         $this->level = $this->forms['level'];
@@ -207,8 +289,10 @@ class WidgetSubMenu extends Component
         $this->forms['code'] = $this->code;
     }
 
+
     public $reply_id;
     public $level;
+    /*
     public function reply($id, $level)
     {
         $this->reply_id = $id;
@@ -220,6 +304,7 @@ class WidgetSubMenu extends Component
 
         $this->popupForm = true;
     }
+    */
 
 
 
@@ -238,101 +323,26 @@ class WidgetSubMenu extends Component
     public function deleteConfirm()
     {
         $id = $this->edit_id;
-        $node = $this->findNode($this->rows, $id);
-        $this->deleteNode($node);
+        unset($this->refs[$id]);
+        $this->save(); //저장
+        $this->popupClose();
+    }
+
+    public function popupClose()
+    {
+        $this->forms = []; // 초기화
+        $this->reply_id = null;
+        $this->level = null;
+        $this->editmode = null;
+        $this->popupForm = false;
+        $this->edit_id = null;
 
         $this->popupDelete = false;
-        $this->popupForm = false;
+
         $this->setup = false;
-
-        //
-        //$this->edit_id = null;
-
-        // 이미지삭제
-        //$this->deleteUploadFiles($this->rows[$id]);
-
-        // 데이터삭제
-        //unset($this->rows[$id]);
-        //$this->dbDeleteRow($id);
-
-        //$this->widget['items'] = $this->rows;
-        //$this->phpSave($this->widget, $this->filename);
     }
 
 
-    /*
-    public function delete($id)
-    {
-
-        $node = $this->findNode($this->rows, $id);
-
-        $this->deleteNode($node);
-        //dd("done");
-    }
-    */
-
-    private function findNode($items, $id)
-    {
-        foreach($items as $item) {
-
-            if($item['id'] == $id) {
-                return $item;
-            }
-
-            // 서브트리가 있는 경우, 재귀탐색
-            if(isset($item['items'])) {
-                $result = $this->findNode($item['items'], $id);
-                if($result) { //탐색한 결과가 있으면
-                    // 탐색결과를 확인
-                    if($result['id'] == $id) return $result;
-                }
-            }
-
-        }
-
-        return false;
-    }
-
-    private function deleteNode($items)
-    {
-        if(isset($items['items'])) {
-
-            foreach($items['items'] as $i => $leaf) {
-                if(isset($leaf['items'])) {
-                    $this->deleteNode($leaf['items']);
-                }
-                //dump("leaf");
-                //dump(__LINE__);
-                //($leaf);
-                $id = $leaf['id'];
-                $this->dbDeleteRow($id);
-            }
-        }
-
-        //dump("node");
-        //dump(__LINE__);
-        if(isset($items['id'])) {
-            $id = $items['id'];
-            //dump($items);
-            $this->dbDeleteRow($id);
-        } else {
-            if(isset($items[0]['id'])) {
-                $id = $items[0]['id'];
-                //dump($items[0]);
-                $this->dbDeleteRow($id);
-            }
-        }
-
-
-    }
-
-    private function dbDeleteRow($id)
-    {
-        DB::table("menu_items")
-            ->where('id',$id)
-            ->delete();
-
-    }
 
     public function cancel()
     {
@@ -346,13 +356,31 @@ class WidgetSubMenu extends Component
     }
 
 
-
     public $setup = false;
     public function setting()
     {
         $this->popupForm = true;
         $this->setup = true;
     }
+
+    // 메뉴클릭 릉크이동
+    public function goToPage($shiftKey, $id)
+    {
+        if($shiftKey) {
+            //dd("shiftKey 클릭=".$id);
+            $this->edit($id);
+        } else {
+            //dd("클릭");
+            $item = $this->refs[$id];
+            //dd($item);
+            if($item && isset($item['link'])) {
+                return redirect()->to($item['link']);
+            }
+
+        }
+    }
+
+
 
 
 

@@ -1,5 +1,6 @@
 <div style="position: relative;width:100%">
     {{-- 위젯 설정버튼 --}}
+    @if($design)
     <div style="position: absolute;top:4px;right:4px;z-index:50;">
         <span class="text-primary" wire:click="create">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
@@ -15,10 +16,10 @@
             </svg>
         </span>
     </div>
+    @endif
 
     {{-- 목록화면 --}}
     @includeIf($viewList)
-
 
     <!-- 팝업 데이터 수정창 -->
     @if ($popupForm)
