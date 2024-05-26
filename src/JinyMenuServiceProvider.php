@@ -46,7 +46,14 @@ class JinyMenuServiceProvider extends ServiceProvider
     {
         /* 라이브와이어 컴포넌트 등록 */
         $this->app->afterResolving(BladeCompiler::class, function () {
-            Livewire::component('WidgetMenu', \Jiny\Menu\Http\Livewire\WidgetSubMenu::class);
+
+            // Json 데이터를 이용한 트리메뉴 구현
+            Livewire::component('Widget-TopMenu',
+                \Jiny\Menu\Http\Livewire\WidgetTopMenu::class);
+
+            Livewire::component('Widget-SubMenu',
+                \Jiny\Menu\Http\Livewire\WidgetSubMenu::class);
+
 
             /*
             ## Livewire::component('WireTree', \Jiny\Menu\Http\Livewire\Admin\WireTree::class);

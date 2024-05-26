@@ -7,18 +7,19 @@ use Illuminate\Support\Facades\DB;
 use Livewire\WithFileUploads;
 use Livewire\Attributes\On;
 
-class WidgetSubMenu extends WidgetMenu
+class WidgetTopMenu extends WidgetMenu
 {
     public function mount()
     {
         parent::mount();
+
 
     }
 
     // Template Method Pattern
     protected function viewLayoutFile()
     {
-        $viewFile = 'jiny-menu::widgets.layout';
+        $viewFile = 'jiny-menu::topmenu.layout';
 
         if(isset($this->widget['view']['layout'])) {
             $viewFile = $this->widget['view']['layout'];
@@ -31,12 +32,11 @@ class WidgetSubMenu extends WidgetMenu
     // Template Method Pattern
     protected function viewListFile()
     {
-        $viewFile = 'jiny-menu::submenu.list';
+        $viewFile = 'jiny-menu::topmenu.list';
 
         if(isset($this->widget['view']['list'])) {
             $viewFile = $this->widget['view']['list'];
         }
-
 
         $this->viewList = $viewFile;
         return $viewFile;
@@ -45,7 +45,7 @@ class WidgetSubMenu extends WidgetMenu
     // Template Method Pattern
     protected function viewListFileItem()
     {
-        $viewFile = 'jiny-menu::submenu.item';
+        $viewFile = 'jiny-menu::topmenu.item';
 
         if(isset($this->widget['view']['item'])) {
             $viewFile = $this->widget['view']['item'];
@@ -58,7 +58,7 @@ class WidgetSubMenu extends WidgetMenu
     // Template Method Pattern
     protected function viewFormFile()
     {
-        $this->viewForm = "jiny-menu::submenu.form";
+        $this->viewForm = "jiny-menu::topmenu.form";
 
         if(isset($this->widget['view']['form'])) {
             $this->viewForm = $this->widget['view']['form'];
