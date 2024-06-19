@@ -1,5 +1,5 @@
 {
-    "name": "jiny/menu",
+    "name": "jiny/site-menu",
     "description": "jiny site menu",
     "keywords": [
         "jinyPHP",
@@ -18,7 +18,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "php": "^8.1"
+        "php": "^8.2"
     },
     "autoload": {
         "psr-4": {
