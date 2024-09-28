@@ -1,6 +1,6 @@
 {
-    "name": "jiny/menu",
-    "description": "jiny site menu",
+    "name": "jiny/site-menu",
+    "description": "jinySite menu builder",
     "keywords": [
         "jinyPHP",
         "framwork",
