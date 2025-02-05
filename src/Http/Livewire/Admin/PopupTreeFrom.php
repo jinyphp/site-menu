@@ -67,14 +67,14 @@ class PopupTreeFrom extends PopupForm
     private function refRow($ref)
     {
         //참조하는 상위 데이터를 읽어옵니다.
-        return DB::table($this->actions['table'])
+        return DB::table($this->actions['table']['name'])
             ->find($ref);
     }
 
     private function maxPos()
     {
         // 선택한 메뉴의 최대 아이템값
-        $pos = DB::table($this->actions['table'])
+        $pos = DB::table($this->actions['table']['name'])
         ->where('menu_id',$this->menu_id)
         ->count('pos')+1;
 
@@ -83,7 +83,7 @@ class PopupTreeFrom extends PopupForm
 
     private function increasePositionAll($pos, $where=[])
     {
-        $db = DB::table($this->actions['table']);
+        $db = DB::table($this->actions['table']['name']);
 
         // 사용자 조건
         foreach($where as $key => $value) {

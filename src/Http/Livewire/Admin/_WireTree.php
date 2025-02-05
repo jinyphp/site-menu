@@ -30,7 +30,7 @@ class WireTree extends Component
 
     private function dbFetch($actions)
     {
-        $rows = DB::table($this->actions['table'])
+        $rows = DB::table($this->actions['table']['name'])
             ->where('menu_id', $this->menu_id)
             ->orderBy('level',"asc")
             ->orderBy('pos',"asc")
@@ -97,7 +97,7 @@ class WireTree extends Component
     {
 
         foreach($items as $item) {
-            DB::table($this->actions['table'])
+            DB::table($this->actions['table']['name'])
             ->where('id', $item['value'])->update(['pos'=>$item['order']]);
         }
 

@@ -27,7 +27,7 @@ class EasyMenuItem extends ResourceController
         $this->setVisit($this);
 
         ## 테이블 정보
-        $this->actions['table'] = "menu_items";
+        $this->actions['table']['name'] = "menu_items";
 
         // 메인화면을 재지정합니다.
         $this->actions['view_main'] = "jinymenu::admin.menu_item.main";
@@ -85,14 +85,14 @@ class EasyMenuItem extends ResourceController
     private function refRow($ref)
     {
         //참조하는 상위 데이터를 읽어옵니다.
-        return DB::table($this->actions['table'])
+        return DB::table($this->actions['table']['name'])
             ->find($ref);
     }
 
     private function maxPos($menu_id)
     {
         // 선택한 메뉴의 최대 아이템값
-        $pos = DB::table($this->actions['table'])
+        $pos = DB::table($this->actions['table']['name'])
         ->where('menu_id',$menu_id)
         ->count('pos')+1;
 

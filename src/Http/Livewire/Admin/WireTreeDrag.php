@@ -54,7 +54,7 @@ class WireTreeDrag extends Component
     // 메뉴 데이터 읽기
     private function dbFetch($actions)
     {
-        $rows = DB::table($this->actions['table'])
+        $rows = DB::table($this->actions['table']['name'])
             ->where('menu_id', $this->menu_id)
             ->orderBy('level',"desc")
             ->orderBy('pos',"asc")
@@ -129,7 +129,7 @@ class WireTreeDrag extends Component
     public function updateTaskOrder($items)
     {
         foreach($items as $item) {
-            DB::table($this->actions['table'])
+            DB::table($this->actions['table']['name'])
             ->where('id', $item['value'])->update(['pos'=>$item['order']]);
         }
     }
@@ -137,34 +137,34 @@ class WireTreeDrag extends Component
     // 클릭하여 상위로 이동
     public function move_up($id)
     {
-        $row = DB::table($this->actions['table'])->find($id);
+        $row = DB::table($this->actions['table']['name'])->find($id);
 
-        $target = DB::table($this->actions['table'])
+        $target = DB::table($this->actions['table']['name'])
             ->where('menu_id',$this->menu_id)
             ->where('ref',$row->ref)
             ->where('pos',"<",$row->pos)
             ->orderBy('pos',"desc")->first();
 
         if($target) {
-            DB::table($this->actions['table'])->where('id',$id)->update(['pos'=>$target->pos]);
-            DB::table($this->actions['table'])->where('id',$target->id)->update(['pos'=>$row->pos]);
+            DB::table($this->actions['table']['name'])->where('id',$id)->update(['pos'=>$target->pos]);
+            DB::table($this->actions['table']['name'])->where('id',$target->id)->update(['pos'=>$row->pos]);
         }
     }
 
     // 클릭하여 하위로 이동
     public function move_down($id)
     {
-        $row = DB::table($this->actions['table'])->find($id);
+        $row = DB::table($this->actions['table']['name'])->find($id);
 
-        $target = DB::table($this->actions['table'])
+        $target = DB::table($this->actions['table']['name'])
             ->where('menu_id',$this->menu_id)
             ->where('ref',$row->ref)
             ->where('pos',">",$row->pos)
             ->orderBy('pos',"asc")->first();
 
         if($target) {
-            DB::table($this->actions['table'])->where('id',$id)->update(['pos'=>$target->pos]);
-            DB::table($this->actions['table'])->where('id',$target->id)->update(['pos'=>$row->pos]);
+            DB::table($this->actions['table']['name'])->where('id',$id)->update(['pos'=>$target->pos]);
+            DB::table($this->actions['table']['name'])->where('id',$target->id)->update(['pos'=>$row->pos]);
         }
     }
 

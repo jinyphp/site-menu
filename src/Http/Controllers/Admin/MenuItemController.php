@@ -27,7 +27,7 @@ class MenuItemController extends ResourceController
         $this->setVisit($this);
 
         ## 테이블 정보
-        $this->actions['table'] = "menu_items";
+        $this->actions['table']['name'] = "menu_items";
 
         // 메인화면을 재지정합니다.
         $this->actions['view_main'] = "jinymenu::admin.menu_item.main";

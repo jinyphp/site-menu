@@ -26,7 +26,7 @@ class MenuController extends ResourceController
 
         /*
         ## 테이블 정보
-        $this->actions['table'] = "menus";
+        $this->actions['table']['name'] = "menus";
 
         //$this->actions['view_title'] = "jinymenu::admin.menu_code.title";
         $this->actions['view_filter'] = "jinymenu::admin.menu_code.filter";

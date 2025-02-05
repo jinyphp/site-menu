@@ -26,7 +26,7 @@ class ModalMenuController extends AjaxResource
         $this->setVisit($this);
 
         ## 테이블 정보
-        $this->actions['table'] = "menus";
+        $this->actions['table']['name'] = "menus";
 
         $this->actions['view_main'] = "jinymenu::admin.modal.menu_code.main";
         $this->actions['view_filter'] = "jinymenu::admin.modal.menu_code.filter";
